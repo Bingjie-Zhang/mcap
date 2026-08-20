@@ -1,0 +1,1 @@
+mcap-analysis-bundle v3.6.0 (2026-08-20): thin-shell agents + hot update — all rules moved to SKILL.md (single source of truth, invariant-checked at render); agent TOMLs shrink to ~2KB and never change again; install.sh symlinks the skill to the git checkout so 'git pull' updates everything with no reinstall/restart. 66 checks.

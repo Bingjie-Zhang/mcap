@@ -1,0 +1,27 @@
+# 金标准案例 001 — 收镜延迟（人工确认根因，2026-08-20）
+# 用途：改模板/registry/脚本后重放本案例，验证系统能否识别抖动型根因
+case_id: CASE-0001
+symptom: 泊入过程收镜过晚（决策发出收镜命令明显晚于条件表面满足时刻）
+recordings:
+  - sha256: e9be07fd8c7068a513e70e2954c4524c282f0faac7bed4fad2bdeb0d5c12491f
+    note: 第一次分析用录包（10:49 时间线）
+  - sha256: unknown          # 第二次分析录包（15:42 时间线），commit 66d355ef29df…
+    note: 补 sha 后填入
+ground_truth:
+  root_cause: >
+    泊入收镜多条件门控之一要求触发条件连续维持超过 150ms
+    (mirror_fold_enable_time)；障碍物抖动导致门控条件反复进出，
+    计时器多次重置，收镜时间被推迟。
+  mechanism_chain: [障碍物抖动, 门控条件反复进出阈值, 150ms计时多次重置, 收镜命令延迟]
+  boundary_code: src/parking/algorithm/decision/apa_hsm/apa_decision_lon_dec_hsm.cpp:291-333
+system_attempts:
+  - date: 2026-08-20
+    version: pre-v3.3
+    result: 停在"150ms 计时未满足是最合理假设，未证实"；mirror_fold_dist 未录制即标缺口，未查上游 proxy
+  - date: 2026-08-20
+    version: unknown (疑似旧版, 待协作者版本自检确认)
+    result: 高置信指认 GetDecTrajs().size()==1 门控；未做门控条件翻转计数，未识别抖动；报告无骨架/耗时表/HTML
+acceptance:  # 重放本案例判定"修复有效"的三条判据
+  - 3b 门控条件核查表存在，且抖动条件（或其上游 proxy，如障碍物 topic）翻转次数被计出并 >2
+  - 结论指向"条件抖动导致计时重置"，因果链含障碍物抖动一环
+  - 报告为骨架格式，含耗时分解表（首行数据获取）与 HTML 路径

@@ -1,0 +1,112 @@
+# APA topic registry v2 — machine-usable interface contracts, not just name hints.
+#
+# Rules for agents:
+# - `interfaces` entries are CONTRACT TEMPLATES: topic_aliases/fields are candidates,
+#   ALWAYS confirm the exact topic and field name against the recording's inventory/schema
+#   before use. An alias that does not exist in the recording is not evidence of absence.
+# - `max_age_ms` feeds mcap_frame_correlation.py --max-age-ms; `clock` feeds
+#   --source-clock/--target-clock and mcap_event_locator.py --clock.
+# - `predicate_hint` feeds mcap_event_locator.py --condition/--threshold; treat it as the
+#   default abnormality definition for that interface unless the case states otherwise.
+# - Entries marked `confirmed: false` are seeded from domain knowledge, not from a real
+#   recording; update them (and set confirmed: true) after the first case validates them.
+schema_version: 2
+registry_version: "2026-08-20.1"
+
+interfaces:
+  - id: perception.obstacle_list
+    domain: perception
+    topic_aliases: [obstacle, perception, world_model]
+    fields:
+      - {path: data.object_id, type: int, role: identity}
+      - {path: data.pose, type: struct, role: state, frame: vehicle}
+      - {path: data.shape, type: struct, role: state}
+      - {path: data.valid, type: bool, role: validity, predicate_hint: {condition: eq, value: "false"}}
+    clock: {preferred: data.header.timestamp, fallback: log_time}
+    id_field: data.seq
+    max_age_ms: 100
+    producer: perception
+    consumers: [decision, planning]
+    specialist: apa_perception_analysis
+    confirmed: false
+
+  - id: decision.collision_check
+    domain: decision
+    topic_aliases: [apa_decision, collision, stop]
+    fields:
+      - {path: data.collision_result, type: enum, role: output,
+         predicate_hint: {condition: regex, pattern: "Close|COLLISION|STOP"}}
+      - {path: data.stop_distance, type: float, unit: m, role: output,
+         predicate_hint: {condition: lt, threshold: 0.15},
+         derived_from: perception.obstacle_list, note: "镜距/间隙类字段由障碍物距离计算；未录制时查障碍物 topic 抖动作为 proxy"}
+      - {path: data.stop_reason, type: enum, role: state}
+      - {path: data.decDebugStr, type: string, role: diagnostic}
+    clock: {preferred: data.header.timestamp, fallback: log_time}
+    id_field: data.seq
+    max_age_ms: 100
+    producer: decision
+    consumers: [planning, control]
+    upstream: [perception.obstacle_list]
+    specialist: apa_decision_analysis
+    confirmed: false
+
+  - id: planning.trajectory
+    domain: planning
+    topic_aliases: [trajectory, planner, parkable_slot, slot]
+    fields:
+      - {path: data.trajectory_num, type: int, role: output,
+         predicate_hint: {condition: eq, value: "0"}}
+      - {path: data.selected_trajectory, type: struct, role: output}
+      - {path: data.target_slot, type: struct, role: state}
+      - {path: data.replan, type: bool, role: state}
+      - {path: data.clearance, type: float, unit: m, role: derived}
+    clock: {preferred: data.header.timestamp, fallback: log_time}
+    id_field: data.seq
+    max_age_ms: 150
+    producer: planning
+    consumers: [control]
+    upstream: [decision.collision_check, perception.obstacle_list]
+    specialist: apa_planning_analysis
+    confirmed: false
+
+  - id: control.command
+    domain: control
+    topic_aliases: [control, chassis, vehicle_status]
+    fields:
+      - {path: data.steering, type: float, unit: rad, role: output}
+      - {path: data.velocity, type: float, unit: mps, role: output}
+      - {path: data.gear, type: enum, role: state}
+      - {path: data.tracking_error, type: float, unit: m, role: derived,
+         predicate_hint: {condition: gt, threshold: 0.3}}
+    clock: {preferred: data.header.timestamp, fallback: log_time}
+    id_field: data.seq
+    max_age_ms: 50
+    producer: control
+    consumers: []
+    upstream: [planning.trajectory]
+    specialist: apa_control_analysis
+    confirmed: false
+
+  - id: system.state
+    domain: cross_domain
+    topic_aliases: [localization, apa_state, psm, hmi, config, diagnostic]
+    fields:
+      - {path: data.state, type: enum, role: state}
+      - {path: data.mode, type: enum, role: state}
+      - {path: data.gear, type: enum, role: state}
+      - {path: data.validity, type: bool, role: validity,
+         predicate_hint: {condition: eq, value: "false"}}
+    clock: {preferred: log_time}
+    max_age_ms: 200
+    producer: system
+    consumers: [perception, decision, planning, control]
+    specialist: apa_manager
+    confirmed: false
+
+# Backward-compatible routing hints (domain -> specialist), kept for older prompts.
+routing:
+  perception: {specialist: apa_perception_analysis, next_domains: [decision, planning, localization]}
+  decision:   {specialist: apa_decision_analysis,   next_domains: [perception, planning, state]}
+  planning:   {specialist: apa_planning_analysis,   next_domains: [decision, localization, perception]}
+  control:    {specialist: apa_control_analysis,    next_domains: [planning, localization, vehicle_feedback]}
+  cross_domain: {specialist: apa_manager,           next_domains: [planning, decision, control]}

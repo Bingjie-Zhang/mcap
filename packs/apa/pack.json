@@ -1,0 +1,51 @@
+{
+  "name": "apa",
+  "title": "APA parking",
+  "fetch_instructions": "- The recording is supplied as a local mcap path in the case packet (current deployment: user provides the path or a Jira key that another process has already materialized to disk).\n- Do not download, install, or request network access yourself; if the recording is not on disk, stop and report the minimum missing input.",
+  "routing_hints": [
+    "Perception: obstacle existence, identity, pose, shape, validity, tracking continuity.",
+    "Decision: collision input/result, clearance, stop distance, arbitration, state transition.",
+    "Planning: target slot, candidate/selected trajectory, replanning, geometric clearance.",
+    "Control: planned versus commanded versus measured pose, steering, velocity, tracking error.",
+    "Cross-domain: only a named producer-consumer disagreement, timing/order issue, or runtime/configuration boundary."
+  ],
+  "domains": [
+    {
+      "id": "perception",
+      "check_aspects": "source availability, object identity/association, validity/freshness, pose/shape/class, frame/unit conversion, filtering, and representation conversion as applicable",
+      "boundary_locations": "the current transform/state/configuration",
+      "domain_extra_method": "",
+      "evidence_guidance": "Include concise evidence for obstacle existence, ID continuity, class, pose, shape, validity, freshness, frame, and consumed representation only when they affect the current hop.",
+      "max_bullets": 14
+    },
+    {
+      "id": "decision",
+      "check_aspects": "bad/stale input, frame/unit conversion, policy, state/configuration, numerical behavior, fallback/default, timing/order, and ownership only as the current hop requires",
+      "boundary_locations": "checker transformation, gate/state, arbitration, fallback, or output publication",
+      "domain_extra_method": "\n7. For stateful behavior, use an evaluation truth table only for the selected window. For geometry, verify frames, reference point, footprint/inflation, sampling, and threshold only when implicated.",
+      "evidence_guidance": "Report first bad input, first bad decision, first bad output, and symptom separately. Classify collision behavior as missed obstacle, policy-accepted clearance, late detection, or insufficient evidence only when supported. Include clearance, stop distance, confidence, or filter effects only with valid frame/unit/clock.",
+      "max_bullets": 16
+    },
+    {
+      "id": "planning",
+      "check_aspects": "target slot, candidate generation, feasibility filters, ranking/selection, replanning triggers, geometric clearance, and upstream decision/perception inputs only as the current hop requires",
+      "boundary_locations": "candidate generation, feasibility, ranking, selection, replanning, gate, fallback, or published output",
+      "domain_extra_method": "",
+      "evidence_guidance": "Separate candidate generation, feasibility, ranking, selection, replanning, gate, fallback, and published output. Include trajectory counts, clearance, or slot geometry only with valid frame/unit/clock.",
+      "max_bullets": 16
+    },
+    {
+      "id": "control",
+      "check_aspects": "planned versus commanded versus measured pose, steering, velocity, gear, tracking error, actuator limits, and timing/order only as the current hop requires",
+      "boundary_locations": "reference resampling, feedback/feedforward terms, limiters, gear/state gating, or command publication",
+      "domain_extra_method": "",
+      "evidence_guidance": "Compare planned, commanded, and measured quantities at the same clock before attributing divergence. Include steering/velocity/tracking-error values only with valid frame/unit/clock.",
+      "max_bullets": 14
+    }
+  ],
+  "reasoning": {
+    "entry": "low",
+    "manager": "medium",
+    "specialist": "high"
+  }
+}
