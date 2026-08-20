@@ -73,11 +73,9 @@ if [[ ${#overwrites[@]} -gt 0 ]]; then
 fi
 
 mkdir -p "${codex_root}/skills" "${codex_root}/agents"
-# Symlink the skill to this checkout: `git pull` here updates the live skill with no reinstall.
 rm -rf "${codex_root}/skills/mcap-analysis"
-ln -s "${bundle_dir}/skills/mcap-analysis" "${codex_root}/skills/mcap-analysis"
+cp -a "${bundle_dir}/skills/mcap-analysis" "${codex_root}/skills/"
 cp -a "${bundle_dir}/agents/." "${codex_root}/agents/"
-echo "skill symlinked -> ${bundle_dir}/skills/mcap-analysis (update with: git -C ${bundle_dir} pull)"
 
 cat "${bundle_dir}/VERSION" 2>/dev/null && cp "${bundle_dir}/VERSION" "${codex_root}/skills/mcap-analysis/VERSION" 2>/dev/null || true
 echo "installed skill: ${codex_root}/skills/mcap-analysis"

@@ -45,21 +45,18 @@ mcap --help
 
 ## 用户安装与更新（v3.6+）
 
-首次（约 3 分钟）：
+安装（每次拿到新包重复这三步即可，约 1 分钟）：
 
-    git clone https://github.com/Bingjie-Zhang/mcap.git mcap-analysis
-    cd mcap-analysis && ./install.sh --pack apa
-    # 重启 Codex 一次（仅此一次）
-    # 内网环境 clone 前配代理：git config --global http.proxy http://10.80.55.250:9001
+    tar -xzf mcap-analysis-bundle-vX.Y.Z-日期.tar.gz
+    cd mcap-analysis-bundle && ./install.sh --pack apa
+    # 重启 Codex（或新建任务）
 
 日常使用：@apa_problem_analysis 分析 /路径/xxx.mcap，症状：……
 报告输出：~/mcap-reports/<案例号>/（report.md + case_report.html）
-
-更新（无需重装/重启）：
-
-    git -C mcap-analysis pull
-
 出问题反馈：把 ~/mcap-reports/<案例号>/ 文件夹发给张冰洁。
+
+薄壳架构说明：agent 配置极小且稳定，规则都在 skill 文件里——因此安装新包
+通常无需删旧 agent，直接覆盖安装即可。
 
 ## Domain Pack architecture (v3)
 
