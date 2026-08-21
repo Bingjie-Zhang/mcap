@@ -1,0 +1,49 @@
+{
+  "case_id": "apa-020-noisy-but-valid",
+  "symptom": "各数值信号叠加约±5%测量噪声，曲线毛糙看似异常，但没有任何信号越过阈值，11.0s正常完成泊车。",
+  "depth": "quick",
+  "recording": "recordings/apa-020-noisy-but-valid.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": null,
+    "note": "noisy_but_valid",
+    "route": [],
+    "negative_checks": [
+      {
+        "topic": "/functions/parking_pnc/apa_decision",
+        "field": "stop_distance",
+        "predicate": "lt 0.15",
+        "debounce_count": 2,
+        "expect": "all_good",
+        "note": "±5%乘性噪声下最低值仍在0.38以上，远离0.15阈值"
+      },
+      {
+        "topic": "/functions/parking_pnc/apa_control_state",
+        "field": "tracking_error",
+        "predicate": "gt 0.3",
+        "debounce_count": 2,
+        "expect": "all_good",
+        "note": "tracking_error基线0.05±5%，噪声不越0.3阈值"
+      },
+      {
+        "topic": "/functions/parking_pnc/apa_control_state",
+        "field": "tracking_error",
+        "predicate": "changed",
+        "debounce_count": 2,
+        "expect": "no_transition",
+        "tolerance": "auto",
+        "note": "changed+tolerance=auto+debounce=2下纯测量噪声不应报跳变"
+      }
+    ],
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "negative-measurement-noise",
+    "initiating_cause": "sensor measurement noise (~5%), not a fault",
+    "necessary_condition": null,
+    "amplifier": null,
+    "consequence": "all thresholds respected; completion at 11.0s, exit_reason stays 0",
+    "observability_gap": null
+  },
+  "record_count": 91
+}

@@ -1,0 +1,35 @@
+{
+  "clock": "log_time",
+  "anchor": null,
+  "note": "slow_but_normal",
+  "route": [],
+  "negative_checks": [
+    {
+      "topic": "/sensor/chassis/vehicle_status",
+      "field": "velocity_mps",
+      "predicate": "gte -0.05",
+      "debounce_count": 2,
+      "expect": "all_good",
+      "window_secs": [
+        0.0,
+        16.5
+      ],
+      "note": "机动窗口内车速恒为-0.12m/s（慢但在动），不是停滞；窗口截到16.5s排除入位后正常的P挡v=0帧"
+    },
+    {
+      "topic": "/functions/parking_pnc/apa_decision",
+      "field": "stop_distance",
+      "predicate": "lt 0.15",
+      "debounce_count": 2,
+      "expect": "all_good"
+    },
+    {
+      "topic": "/functions/parking_pnc/apa_state",
+      "field": "exit_reason",
+      "predicate": "ne 0",
+      "debounce_count": 2,
+      "expect": "all_good"
+    }
+  ],
+  "confidence": "high"
+}

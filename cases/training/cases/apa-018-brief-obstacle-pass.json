@@ -1,0 +1,47 @@
+{
+  "case_id": "apa-018-brief-obstacle-pass",
+  "symptom": "6.5s前后行人正常路过，障碍距离短暂降到0.5m又离开；决策减速（车速-0.28→-0.08）未停车，11.0s完成泊车。",
+  "depth": "quick",
+  "recording": "recordings/apa-018-brief-obstacle-pass.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": null,
+    "note": "brief_obstacle_pass_no_fault",
+    "route": [],
+    "negative_checks": [
+      {
+        "topic": "/functions/parking_pnc/apa_decision",
+        "field": "stop_distance",
+        "predicate": "lt 0.15",
+        "debounce_count": 2,
+        "expect": "all_good",
+        "note": "行人路过时stop_distance最低0.5m，减速即可，从未低于0.15停车线"
+      },
+      {
+        "topic": "/functions/parking_pnc/apa_decision",
+        "field": "collision_result",
+        "predicate": "regex Close",
+        "debounce_count": 2,
+        "expect": "all_good",
+        "note": "决策全程保持Open，无碰撞停车输出"
+      },
+      {
+        "topic": "/functions/perception/obstacle_pk",
+        "field": "valid",
+        "predicate": "eq false",
+        "debounce_count": 2,
+        "expect": "all_good"
+      }
+    ],
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "negative-transient-obstacle",
+    "initiating_cause": "pedestrian crossing the path (normal environment event)",
+    "necessary_condition": null,
+    "amplifier": null,
+    "consequence": "temporary slowdown only; completion at 11.0s, exit_reason stays 0",
+    "observability_gap": null
+  },
+  "record_count": 115
+}

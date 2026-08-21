@@ -1,0 +1,46 @@
+{
+  "case_id": "apa-016-near-threshold-no-cross",
+  "symptom": "stop_distance全程在0.16~0.25之间紧贴0.15完成门限波动，看似随时要触发停车，实际从未越界，泊车在11.0s正常完成。",
+  "depth": "quick",
+  "recording": "recordings/apa-016-near-threshold-no-cross.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": null,
+    "note": "near_threshold_no_cross",
+    "route": [],
+    "negative_checks": [
+      {
+        "topic": "/functions/parking_pnc/apa_decision",
+        "field": "stop_distance",
+        "predicate": "lt 0.15",
+        "debounce_count": 2,
+        "expect": "all_good",
+        "note": "全程0.16~0.249贴阈值波动，最低0.160，从不越过0.15"
+      },
+      {
+        "topic": "/functions/parking_pnc/apa_state",
+        "field": "exit_reason",
+        "predicate": "ne 0",
+        "debounce_count": 2,
+        "expect": "all_good"
+      },
+      {
+        "topic": "/functions/parking_pnc/apa_decision",
+        "field": "collision_result",
+        "predicate": "regex Close",
+        "debounce_count": 2,
+        "expect": "all_good"
+      }
+    ],
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "negative-near-threshold",
+    "initiating_cause": "none (normal tight-clearance approach)",
+    "necessary_condition": null,
+    "amplifier": null,
+    "consequence": "clean completion, work_state=8 at 11.0s, exit_reason stays 0",
+    "observability_gap": null
+  },
+  "record_count": 103
+}

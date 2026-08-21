@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 """Locate abnormal events in MCAP topics with predicates, not raw field changes.
 
+Gap semantics (missing-policy=unknown, changed mode): a value change straddling a
+data gap is reported ONLY in gap_transitions and ONLY when the values on the two
+sides differ; a pending (un-debounced) candidate interrupted by a gap is dropped.
+The transition instant inside a gap is unprovable by design — check
+missing_or_null_count and gap_transitions rather than assuming continuity.
+
 A sample is classified good / bad / unknown by an explicit predicate
 (gt/gte/lt/lte/eq/ne/regex/changed). The locator reports last_good and
 first_bad with debounce and minimum-duration semantics, so float jitter and
@@ -34,6 +40,13 @@ def as_number(value: Any) -> Optional[float]:
         return float(value)
     if isinstance(value, (int, float)):
         return float(value)
+    if isinstance(value, str):
+        # protojson 把 int64/uint64 序列化为字符串；接受纯数字字符串
+        try:
+            number = float(value)
+        except ValueError:
+            return None
+        return number if number == number and abs(number) != float("inf") else None
     return None
 
 
@@ -90,6 +103,8 @@ def locate_predicate(samples: list[tuple[float, Any]], args: argparse.Namespace,
         labeled.append((stamp, value, state))
     last_good: Optional[dict[str, Any]] = None
     run: list[tuple[float, Any]] = []
+    sub_debounce_runs = 0      # 曾命中谓词但被 debounce/min-duration 重置的短 run
+    longest_sub_run = 0
     for stamp, value, state in labeled:
         if state == "bad":
             run.append((stamp, value))
@@ -102,8 +117,14 @@ def locate_predicate(samples: list[tuple[float, Any]], args: argparse.Namespace,
                     "bad_run_count": len(run),
                     "bad_duration_ms": round(duration_ms, 3),
                     "missing_or_null_count": missing,
+                    "sub_debounce_runs": sub_debounce_runs,
+                    "longest_sub_debounce_run": longest_sub_run,
+                    "note": None,
                 }
         else:
+            if run:
+                sub_debounce_runs += 1
+                longest_sub_run = max(longest_sub_run, len(run))
             run = []
             if state == "good":
                 last_good = {"time": stamp, "value": value}
@@ -119,11 +140,46 @@ def locate_predicate(samples: list[tuple[float, Any]], args: argparse.Namespace,
         "first_bad": {"time": run[0][0], "value": run[0][1]} if run else None,
         "bad_run_count": len(run),
         "missing_or_null_count": missing,
+        "sub_debounce_runs": sub_debounce_runs,
+        "longest_sub_debounce_run": longest_sub_run,
+        "note": ("predicate matched in %d short run(s) (longest %d) suppressed by "
+                 "debounce/min-duration; rerun with --debounce-count 1 --min-duration-ms 0 "
+                 "to inspect" % (sub_debounce_runs, longest_sub_run))
+                if sub_debounce_runs else None,
     }
 
 
+def resolve_tolerance(samples: list[tuple[float, Any]], spec) -> tuple[float, str]:
+    """Resolve --tolerance: float, or 'auto' = 4 x median |inter-sample delta| (noise floor)."""
+    if spec != "auto":
+        return float(spec), "explicit"
+    numeric = 0
+    deltas = []
+    prev = None
+    for _, v in samples:
+        n = as_number(v)
+        if n is None:
+            prev = None  # 缺口/非数值：断开，不产生跨缺口伪 delta
+            continue
+        numeric += 1
+        if prev is not None:
+            deltas.append(abs(n - prev))
+        prev = n
+    if numeric < 8 or not deltas:
+        return 0.0, f"auto-fallback({numeric} numeric samples)"
+    deltas.sort()
+    mid = len(deltas) // 2
+    median = deltas[mid] if len(deltas) % 2 else (deltas[mid - 1] + deltas[mid]) / 2.0
+    return 4.0 * median, "auto"
+
+
 def locate_changed(samples: list[tuple[float, Any]], args: argparse.Namespace) -> dict[str, Any]:
+    tolerance, tolerance_mode = resolve_tolerance(samples, args.tolerance)
+    args = argparse.Namespace(**{**vars(args), "tolerance": tolerance})
     transitions: list[dict[str, Any]] = []
+    gap_transitions: list[dict[str, Any]] = []  # 跨缺口前后值不同：疑似变化，时刻不可证
+    gap_before: tuple[float, Any] | None = None
+    last_seen: tuple[float, Any] | None = None  # 缺口前最后一个真实（非缺失）样本
     missing = 0
     prior: Optional[tuple[float, Any]] = None
     candidate: Optional[dict[str, Any]] = None
@@ -135,11 +191,22 @@ def locate_changed(samples: list[tuple[float, Any]], args: argparse.Namespace) -
                 continue
             if args.missing_policy == "unknown":
                 # 缺失视为断线：重置基线，不把 值->null / null->值 当作事件
+                if last_seen is not None:
+                    gap_before = last_seen
                 prior = None
                 candidate = None
                 stable = 0
                 continue
+        last_seen = (stamp, value)
         if prior is None:
+            if gap_before is not None:
+                if values_differ(gap_before[1], value, args.tolerance):
+                    gap_transitions.append({
+                        "before_gap_time": gap_before[0], "before_gap_value": gap_before[1],
+                        "after_gap_time": stamp, "after_gap_value": value,
+                        "note": "value differs across a data gap; transition instant unprovable",
+                    })
+                gap_before = None
             prior = (stamp, value)
             continue
         if candidate is not None:
@@ -186,6 +253,11 @@ def locate_changed(samples: list[tuple[float, Any]], args: argparse.Namespace) -
         "transitions": transitions[: args.max_changes],
         "transitions_truncated": len(transitions) > args.max_changes,
         "missing_or_null_count": missing,
+        "tolerance_used": args.tolerance,
+        "tolerance_mode": tolerance_mode,
+        "gap_transition_count": len(gap_transitions),
+        "gap_transitions": gap_transitions[: args.max_changes],
+        "gap_transitions_truncated": len(gap_transitions) > args.max_changes,
     }
 
 
@@ -196,7 +268,7 @@ def predicate_text(args: argparse.Namespace) -> str:
         return f"value {args.condition} {args.value!r}"
     if args.condition == "regex":
         return f"value regex {args.pattern!r}"
-    return f"changed(tolerance={args.tolerance}, debounce={args.debounce_count})"
+    return f"changed(tolerance={args.tolerance!r}, debounce={args.debounce_count})"
 
 
 def locate(args: argparse.Namespace) -> dict[str, Any]:
@@ -249,10 +321,24 @@ def main() -> int:
     parser.add_argument("--condition", default="changed",
                         choices=["changed", "gt", "gte", "lt", "lte", "eq", "ne", "regex"])
     parser.add_argument("--threshold", type=float, help="Numeric bound for gt/gte/lt/lte")
-    parser.add_argument("--value", help="Comparison value for eq/ne (string or canonical JSON)")
+    parser.add_argument("--value", help="Comparison value for eq/ne — canonical JSON text: booleans are lowercase true/false ('False' never matches)")
     parser.add_argument("--pattern", help="Regex for --condition regex")
-    parser.add_argument("--tolerance", type=float, default=0.0,
-                        help="Numeric noise band for changed; differences <= tolerance are not events")
+    def tolerance_arg(raw: str):
+        if raw.strip().lower() == "auto":
+            return "auto"
+        try:
+            val = float(raw)
+        except ValueError:
+            raise argparse.ArgumentTypeError(f"--tolerance must be a number or 'auto', got {raw!r}")
+        if val != val or abs(val) == float("inf") or val < 0:
+            raise argparse.ArgumentTypeError(f"--tolerance must be a finite non-negative number, got {raw!r}")
+        return val
+
+    parser.add_argument("--tolerance", type=tolerance_arg, default=0.0,
+                        help="Numeric noise band for changed: a finite non-negative number, or 'auto' "
+                             "(4 x median absolute delta between CONSECUTIVE samples, gaps excluded; "
+                             "falls back to 0 when <8 numeric samples). Not applicable to threshold "
+                             "predicates (a warning is emitted if combined).")
     parser.add_argument("--debounce-count", type=int, default=1,
                         help="Consecutive samples required to confirm an event")
     parser.add_argument("--min-duration-ms", type=float, default=0.0,
@@ -271,6 +357,9 @@ def main() -> int:
         parser.error(f"--condition {args.condition} requires --value")
     if args.condition == "regex" and not args.pattern:
         parser.error("--condition regex requires --pattern")
+    if args.condition != "changed" and args.tolerance == "auto":
+        print("warning: --tolerance auto only applies to --condition changed; ignored", file=sys.stderr)
+        args.tolerance = 0.0
     if args.debounce_count <= 0 or args.max_changes <= 0:
         parser.error("--debounce-count and --max-changes must be positive")
     try:

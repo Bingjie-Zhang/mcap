@@ -1,0 +1,32 @@
+{
+  "clock": "log_time",
+  "anchor": null,
+  "note": "brief_obstacle_pass_no_fault",
+  "route": [],
+  "negative_checks": [
+    {
+      "topic": "/functions/parking_pnc/apa_decision",
+      "field": "stop_distance",
+      "predicate": "lt 0.15",
+      "debounce_count": 2,
+      "expect": "all_good",
+      "note": "行人路过时stop_distance最低0.5m，减速即可，从未低于0.15停车线"
+    },
+    {
+      "topic": "/functions/parking_pnc/apa_decision",
+      "field": "collision_result",
+      "predicate": "regex Close",
+      "debounce_count": 2,
+      "expect": "all_good",
+      "note": "决策全程保持Open，无碰撞停车输出"
+    },
+    {
+      "topic": "/functions/perception/obstacle_pk",
+      "field": "valid",
+      "predicate": "eq false",
+      "debounce_count": 2,
+      "expect": "all_good"
+    }
+  ],
+  "confidence": "high"
+}

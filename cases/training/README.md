@@ -47,3 +47,13 @@ python3 ../../.codex/skills/mcap-analysis/scripts/mcap_event_locator.py recordin
 13. `apa-013-gradual-drift`：`tracking_error` 自 2.0s 起以 0.013/s 从 0.05 线性漂移，20s 后于 22.0s 首次越过 0.3（无突变），24.0s `exit_reason=106`。
 14. `apa-014-user-cancel-no-fault`：负样本——7.0s 用户主动取消（PARKING→USER_CANCELLED，`exit_reason` 保持 0），常见故障谓词（stop_distance lt 0.15 / exit_reason ne 0 / trajectory_num eq 0）全部 all_good；expected `anchor: null` + `note: user_cancel_no_fault`。
 15. `apa-015-clock-skew`：`apa_decision` 的 `data.header.timestamp` 相对 log_time 固定 +0.8s；真实异常为 `stop_distance lt 0.15`，log_time 下 first_bad=7.0s、header_time 下会误判为 7.8s；expected 含 `clock_note`。
+
+## 负样本 16-20（generate_negatives.py 生成）
+
+一切正常但表面可疑的场景，正确答案是**不报任何故障**。expected 均为 `anchor: null` + `note` + `negative_checks`（该场景最易误报的谓词，逐个用 `mcap_event_locator.py` 按标注的 debounce 跑，必须返回 `all_good` / `no_transition`）。
+
+16. `apa-016-near-threshold-no-cross`：`stop_distance` 全程 0.16~0.249 紧贴 0.15 完成门限波动（最低 0.160，含 0.161/0.249 极值帧）但从不越界，11.0s 正常完成；易误报谓词 `stop_distance lt 0.15`、`exit_reason ne 0`、`collision_result regex Close` 全部 all_good。
+17. `apa-017-single-replan-normal`：中途正常单次重规划，`trajectory_num` 3→0（仅 4.0s 一帧）→2→1 按序完成；`trajectory_num eq 0` 在 debounce=2 下 all_good，debounce=1 下能定位到 4.0s 那一帧（transition_found，bad_run_count=1，证明瞬时事件真实存在）——expected 里的 `debounce_note` 记录了这组双 debounce 证据。
+18. `apa-018-brief-obstacle-pass`：行人 5.0~8.5s 正常路过，障碍距离 6.5s 短暂降到 0.5m 又离开；决策减速（车速 -0.28→-0.08）未停车，`collision_result` 全程 Open，11.0s 完成；`stop_distance lt 0.15`、`regex Close`、`obstacle valid eq false` 全部 all_good。
+19. `apa-019-slow-but-normal`：全程车速仅 -0.12 m/s，17s 才完成（比常规 12s 长约 50%），但每个信号健康、状态机 2→3→5→8 按序走完；"车辆停滞"谓词 `velocity_mps gte -0.05`（窗口 0~16.5s，排除入位后 P 挡 v=0）与常规故障谓词全部 all_good。
+20. `apa-020-noisy-but-valid`：数值信号叠加 ±5% 乘性测量噪声（`stop_distance` 最低 0.409、`tracking_error` 0.048~0.052），不越任何阈值，11.0s 完成；`lt 0.15` / `gt 0.3` all_good，`tracking_error` 的 `changed --tolerance auto --debounce-count 2` 为 no_transition（噪声不应报跳变）。

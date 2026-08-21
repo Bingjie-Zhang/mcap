@@ -1,0 +1,44 @@
+{
+  "clock": "log_time",
+  "anchor": null,
+  "note": "single_replan_transient_zero",
+  "route": [],
+  "negative_checks": [
+    {
+      "topic": "/functions/parking_pnc/apa_planning_trajectory",
+      "field": "trajectory_num",
+      "predicate": "eq 0",
+      "debounce_count": 2,
+      "expect": "all_good",
+      "note": "4.0s重规划瞬时归零仅1帧，debounce=2应滤掉；这是正常单次重规划，不是apa-004类故障"
+    },
+    {
+      "topic": "/functions/parking_pnc/apa_decision",
+      "field": "stop_distance",
+      "predicate": "lt 0.15",
+      "debounce_count": 2,
+      "expect": "all_good"
+    },
+    {
+      "topic": "/functions/parking_pnc/apa_state",
+      "field": "exit_reason",
+      "predicate": "ne 0",
+      "debounce_count": 2,
+      "expect": "all_good"
+    }
+  ],
+  "debounce_note": {
+    "topic": "/functions/parking_pnc/apa_planning_trajectory",
+    "field": "trajectory_num",
+    "predicate": "eq 0",
+    "debounce_1": {
+      "status": "transition_found",
+      "first_bad": 4.0
+    },
+    "debounce_2": {
+      "status": "all_good"
+    },
+    "note": "debounce=1能看到4.0s那一帧（证明瞬时事件真实存在），debounce=2不报——瞬时归零属正常重规划"
+  },
+  "confidence": "high"
+}

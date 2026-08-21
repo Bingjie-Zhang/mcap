@@ -1,0 +1,31 @@
+{
+  "clock": "log_time",
+  "anchor": null,
+  "note": "near_threshold_no_cross",
+  "route": [],
+  "negative_checks": [
+    {
+      "topic": "/functions/parking_pnc/apa_decision",
+      "field": "stop_distance",
+      "predicate": "lt 0.15",
+      "debounce_count": 2,
+      "expect": "all_good",
+      "note": "全程0.16~0.249贴阈值波动，最低0.160，从不越过0.15"
+    },
+    {
+      "topic": "/functions/parking_pnc/apa_state",
+      "field": "exit_reason",
+      "predicate": "ne 0",
+      "debounce_count": 2,
+      "expect": "all_good"
+    },
+    {
+      "topic": "/functions/parking_pnc/apa_decision",
+      "field": "collision_result",
+      "predicate": "regex Close",
+      "debounce_count": 2,
+      "expect": "all_good"
+    }
+  ],
+  "confidence": "high"
+}
