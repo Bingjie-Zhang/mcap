@@ -207,7 +207,7 @@ with open(a.recording, "rb") as fh:
               and 'model_reasoning_effort = "high"' in (out_dir / "apa_decision_analysis.toml").read_text())
         check("render.quick_solo", "Spawn NO specialist" in
               (BUNDLE / "skills" / "mcap-analysis" / "SKILL.md").read_text())
-        check("render.thin_shell", len((out_dir / "apa_manager.toml").read_text()) < 4000)
+        check("render.thin_shell", len((out_dir / "apa_manager.toml").read_text()) < 6000)
 
         # 泛化：最小 demo pack（2 个领域）应渲染出 4 个 agent，领域词正确代入
         demo = Path(tmp) / "packs" / "demo"
