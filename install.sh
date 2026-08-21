@@ -13,22 +13,24 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ ! -f "${bundle_dir}/packs/${pack}/pack.json" ]]; then
-  echo "unknown pack '${pack}'; available packs:" >&2
-  ls "${bundle_dir}/packs" >&2 || true
-  exit 1
-fi
-
-# Render agents for the selected pack (writes bundle_dir/agents/<pack>_*.toml)
-python3 "${bundle_dir}/render_agents.py" "${pack}" --check
-python3 "${bundle_dir}/render_agents.py" "${pack}" >/dev/null
-
-# Stage the pack's registry/glossary into the skill references under pack-scoped names
-cp "${bundle_dir}/packs/${pack}/registry.yaml" \
-   "${bundle_dir}/skills/mcap-analysis/references/${pack}_topic_registry.yaml"
-if [[ -f "${bundle_dir}/packs/${pack}/glossary.md" ]]; then
-  cp "${bundle_dir}/packs/${pack}/glossary.md" \
-     "${bundle_dir}/skills/mcap-analysis/references/${pack}_glossary.md"
+if [[ -d "${bundle_dir}/packs" ]]; then
+  # 开发版：从 pack 渲染 agents 并暂存 registry/术语表
+  if [[ ! -f "${bundle_dir}/packs/${pack}/pack.json" ]]; then
+    echo "unknown pack '${pack}'; available packs:" >&2
+    ls "${bundle_dir}/packs" >&2 || true
+    exit 1
+  fi
+  python3 "${bundle_dir}/render_agents.py" "${pack}" --check
+  python3 "${bundle_dir}/render_agents.py" "${pack}" >/dev/null
+  cp "${bundle_dir}/packs/${pack}/registry.yaml" \
+     "${bundle_dir}/skills/mcap-analysis/references/${pack}_topic_registry.yaml"
+  if [[ -f "${bundle_dir}/packs/${pack}/glossary.md" ]]; then
+    cp "${bundle_dir}/packs/${pack}/glossary.md" \
+       "${bundle_dir}/skills/mcap-analysis/references/${pack}_glossary.md"
+  fi
+else
+  # 用户精简包：agents/ 已预渲染，registry 已在 references/，直接安装
+  echo "user bundle: installing pre-rendered agents for pack '${pack}'"
 fi
 
 if [[ ! -d "${bundle_dir}/skills/mcap-analysis" || ! -d "${bundle_dir}/agents" ]]; then
