@@ -1,0 +1,30 @@
+{
+  "clock": "log_time",
+  "anchor": {
+    "topic": "/functions/parking_pnc/apa_planning_trajectory",
+    "field": "trajectory_num",
+    "predicate": "eq 0",
+    "last_good": 3.0,
+    "first_bad": 4.0
+  },
+  "window_secs": [
+    3.0,
+    4.5
+  ],
+  "specialist": "apa_planning_analysis",
+  "inputs": [
+    {
+      "topic": "/functions/perception/parking_slot_info",
+      "field": "slot_id",
+      "max_age_ms": 150
+    },
+    {
+      "topic": "/functions/parking_pnc/apa_decision",
+      "field": "errcode",
+      "max_age_ms": 100
+    }
+  ],
+  "question": "规划输出变空前，车位42是否已失效或被替换成slot_id=0？",
+  "boundary": "parking_slot_info -> planning trajectory",
+  "confidence": "high"
+}

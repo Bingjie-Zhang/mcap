@@ -1,0 +1,40 @@
+{
+  "case_id": "apa-007-missing-obstacle-signal",
+  "symptom": "决策输出STOP，但记录中没有对应时段的障碍物/自由空间输入。",
+  "depth": "standard",
+  "recording": "recordings/apa-007-missing-obstacle-signal.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": {
+      "topic": "/functions/parking_pnc/apa_decision",
+      "field": "errcode",
+      "predicate": "eq 205",
+      "last_good": 3.0,
+      "first_bad": 4.0
+    },
+    "window_secs": [
+      3.0,
+      4.5
+    ],
+    "specialist": "apa_decision_analysis",
+    "inputs": [
+      {
+        "topic": "/functions/perception/obstacle_pk",
+        "field": "valid",
+        "max_age_ms": 100
+      }
+    ],
+    "question": "4.0s附近自由空间/障碍物输入是无效、超时，还是被过滤未录制？",
+    "boundary": "observability gap before decision",
+    "confidence": "medium"
+  },
+  "labels": {
+    "class": "observability-gap",
+    "initiating_cause": "unrecorded critical input",
+    "necessary_condition": "decision error path active",
+    "amplifier": null,
+    "consequence": "trajectory_num=0 and exit_reason=205",
+    "observability_gap": "obstacle_pk absent from 4.0s onward"
+  },
+  "record_count": 52
+}

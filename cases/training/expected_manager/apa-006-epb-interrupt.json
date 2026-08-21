@@ -1,0 +1,23 @@
+{
+  "clock": "log_time",
+  "anchor": {
+    "topic": "/functions/parking_pnc/apa_state",
+    "field": "exit_reason",
+    "predicate": "eq 21",
+    "last_good": 4.0,
+    "first_bad": 5.0
+  },
+  "window_secs": [
+    4.0,
+    5.5
+  ],
+  "route": [
+    {
+      "topic": "/sensor/chassis/vehicle_status",
+      "field": "epb",
+      "max_age_ms": 50
+    }
+  ],
+  "boundary": "vehicle_status.epb -> APA state machine",
+  "confidence": "high"
+}

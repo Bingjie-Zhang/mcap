@@ -1,0 +1,73 @@
+{
+  "dataset_id": "apa-manager-training-20260821",
+  "synthetic": true,
+  "source_commit": "15920335bd47c235654425b23e87fe05ee4f1ff0",
+  "source_paths": [
+    "src/parking_pnc/config/nodes/FusionDecisionNode.yaml",
+    "src/parking_pnc/config/nodes/ApaControlNode.yaml",
+    "src/parking_pnc/config/nodes/SAIC-ZS32PHEV/decision_config.yaml",
+    "src/parking_pnc/config/nodes/SAIC-ZS32PHEV/control_config.yaml",
+    "src/parking_pnc/config/state_machine/VW-ID4X/state_config.yaml",
+    "src/adapter/hmi_adapter/ID4-LC-1J6B/interfaces/msg/ApaWorkState.msg",
+    "src/adapter/hmi_adapter/ID4-LC-1J6B/interfaces/msg/ApaExitReason.msg",
+    "bazel-base-qnx/.conan/p/hobot4242bcd32a2d1/p/include/protocol/apa_decision.pb.h",
+    "bazel-base-qnx/.conan/p/hobot4242bcd32a2d1/p/include/protocol/apa_planning.pb.h",
+    "bazel-base-qnx/.conan/p/hobot4242bcd32a2d1/p/include/protocol/apa_control_state.pb.h"
+  ],
+  "cases": [
+    {
+      "case_id": "apa-001-normal-complete",
+      "recording": "recordings/apa-001-normal-complete.mcap",
+      "records": 63,
+      "class": "normal"
+    },
+    {
+      "case_id": "apa-002-obstacle-close-stop",
+      "recording": "recordings/apa-002-obstacle-close-stop.mcap",
+      "records": 63,
+      "class": "decision-stop"
+    },
+    {
+      "case_id": "apa-003-stale-obstacle-reuse",
+      "recording": "recordings/apa-003-stale-obstacle-reuse.mcap",
+      "records": 54,
+      "class": "timing-stale-input"
+    },
+    {
+      "case_id": "apa-004-empty-trajectory-no-slot",
+      "recording": "recordings/apa-004-empty-trajectory-no-slot.mcap",
+      "records": 56,
+      "class": "planning-empty"
+    },
+    {
+      "case_id": "apa-005-control-track-out",
+      "recording": "recordings/apa-005-control-track-out.mcap",
+      "records": 63,
+      "class": "control-track-out"
+    },
+    {
+      "case_id": "apa-006-epb-interrupt",
+      "recording": "recordings/apa-006-epb-interrupt.mcap",
+      "records": 56,
+      "class": "user-safety-intervention"
+    },
+    {
+      "case_id": "apa-007-missing-obstacle-signal",
+      "recording": "recordings/apa-007-missing-obstacle-signal.mcap",
+      "records": 52,
+      "class": "observability-gap"
+    },
+    {
+      "case_id": "apa-008-obstacle-validity-flicker",
+      "recording": "recordings/apa-008-obstacle-validity-flicker.mcap",
+      "records": 63,
+      "class": "perception-flicker"
+    },
+    {
+      "case_id": "apa-009-bad-from-start-camera-fault",
+      "recording": "recordings/apa-009-bad-from-start-camera-fault.mcap",
+      "records": 35,
+      "class": "bad-from-start"
+    }
+  ]
+}

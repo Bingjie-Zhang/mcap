@@ -30,7 +30,7 @@
 
 - 工具链首次在全故障类型数据集上全绿；此前验证面仅 2 个自建场景
 - 本次仅验**脚本定位层**；agent 编排层（模型是否按序执行）仍需真实 Codex 环境验证
-- 待办：数据集收编进 bundle（cases/training/）+ 评测脚本入 tests/，作为第三重发版门禁
+- ✅ 已完成（2026-08-21）：数据集收编 cases/training/，评测并入 run_tests 第三重门禁（golden.9scenarios）；registry topic_aliases 已对齐数据集中的 luna6 真实接口名
 
 ## 历史测试基线（摘要）
 

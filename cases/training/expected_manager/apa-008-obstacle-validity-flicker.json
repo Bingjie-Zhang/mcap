@@ -1,0 +1,30 @@
+{
+  "clock": "log_time",
+  "anchor": {
+    "topic": "/functions/perception/obstacle_pk",
+    "field": "valid",
+    "predicate": "eq false",
+    "last_good": 4.0,
+    "first_bad": 5.0
+  },
+  "window_secs": [
+    4.0,
+    6.5
+  ],
+  "specialist": "apa_perception_analysis",
+  "inputs": [
+    {
+      "topic": "/functions/perception/obstacle_pk",
+      "field": "object_id",
+      "max_age_ms": 100
+    },
+    {
+      "topic": "/functions/parking_pnc/apa_decision",
+      "field": "collision_result",
+      "max_age_ms": 100
+    }
+  ],
+  "question": "object_id=701的身份、frame和valid性是否连续，还是感知侧先丢失？",
+  "boundary": "perception validity -> decision/planning",
+  "confidence": "high"
+}

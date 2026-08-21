@@ -11,12 +11,12 @@
 # - Entries marked `confirmed: false` are seeded from domain knowledge, not from a real
 #   recording; update them (and set confirmed: true) after the first case validates them.
 schema_version: 2
-registry_version: "2026-08-20.1"
+registry_version: "2026-08-21.1"
 
 interfaces:
   - id: perception.obstacle_list
     domain: perception
-    topic_aliases: [obstacle, perception, world_model]
+    topic_aliases: ["/functions/perception/obstacle_pk", obstacle, perception, world_model]  # 首项来自 luna6 源码接口(合成数据集验证)
     fields:
       - {path: data.object_id, type: int, role: identity}
       - {path: data.pose, type: struct, role: state, frame: vehicle}
@@ -32,7 +32,7 @@ interfaces:
 
   - id: decision.collision_check
     domain: decision
-    topic_aliases: [apa_decision, collision, stop]
+    topic_aliases: ["/functions/parking_pnc/apa_decision", apa_decision, collision, stop]  # 首项来自 luna6 源码接口
     fields:
       - {path: data.collision_result, type: enum, role: output,
          predicate_hint: {condition: regex, pattern: "Close|COLLISION|STOP"}}
@@ -52,7 +52,7 @@ interfaces:
 
   - id: planning.trajectory
     domain: planning
-    topic_aliases: [trajectory, planner, parkable_slot, slot]
+    topic_aliases: ["/functions/parking_pnc/apa_planning_trajectory", "/functions/perception/parking_slot_info", trajectory, planner, parkable_slot, slot]  # 首两项来自 luna6 源码接口
     fields:
       - {path: data.trajectory_num, type: int, role: output,
          predicate_hint: {condition: eq, value: "0"}}
@@ -71,7 +71,7 @@ interfaces:
 
   - id: control.command
     domain: control
-    topic_aliases: [control, chassis, vehicle_status]
+    topic_aliases: ["/functions/parking_pnc/apa_control_state", "/sensor/chassis/vehicle_status", control, chassis, vehicle_status]  # 首两项来自 luna6 源码接口
     fields:
       - {path: data.steering, type: float, unit: rad, role: output}
       - {path: data.velocity, type: float, unit: mps, role: output}
@@ -89,7 +89,7 @@ interfaces:
 
   - id: system.state
     domain: cross_domain
-    topic_aliases: [localization, apa_state, psm, hmi, config, diagnostic]
+    topic_aliases: ["/functions/parking_pnc/apa_state", localization, apa_state, psm, hmi, config, diagnostic]  # 首项来自 luna6 源码接口
     fields:
       - {path: data.state, type: enum, role: state}
       - {path: data.mode, type: enum, role: state}

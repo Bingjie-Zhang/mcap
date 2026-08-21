@@ -3,9 +3,13 @@
 import json, subprocess, sys
 from pathlib import Path
 
-D = Path("/Users/bingjiezhang/Desktop/apa_manager_training_20260821")
-S = Path("/private/tmp/claude-501/-Users-bingjiezhang/448ab922-9011-4c4b-96b9-9bae9d6a9ac7/scratchpad/mcap/mcap-analysis-bundle/skills/mcap-analysis/scripts")
+BUNDLE = Path(__file__).resolve().parents[1]
+D = Path(sys.argv[1]) if len(sys.argv) > 1 else BUNDLE / "cases" / "training"
+S = BUNDLE / "skills" / "mcap-analysis" / "scripts"
 PY = sys.executable
+if not D.is_dir():
+    print(f"dataset not found: {D}")
+    raise SystemExit(2)
 TOL = 0.15  # 秒
 
 def run_locator(rec, field_spec, cond_args):
@@ -73,3 +77,4 @@ for n,v,d in rows:
     print(f"{n:44s} {v:5s} {d}")
 p = sum(1 for _,v,_ in rows if v=="PASS")
 print(f"\n定位层: {p}/{len(rows)} PASS")
+raise SystemExit(0 if p == len(rows) else 1)

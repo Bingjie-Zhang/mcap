@@ -1,0 +1,16 @@
+{
+  "case_id": "apa-001-normal-complete",
+  "symptom": "APA正常泊入并完成，无异常输出。",
+  "depth": "quick",
+  "recording": "recordings/apa-001-normal-complete.mcap",
+  "expected": {
+    "anchor_status": "all_good",
+    "route": [],
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "normal",
+    "causal_boundary": null
+  },
+  "record_count": 63
+}

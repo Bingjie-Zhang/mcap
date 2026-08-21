@@ -1,0 +1,30 @@
+{
+  "clock": "log_time",
+  "anchor": {
+    "topic": "/functions/parking_pnc/apa_control_state",
+    "field": "tracking_error",
+    "predicate": "gt 0.3",
+    "last_good": 6.0,
+    "first_bad": 7.0
+  },
+  "window_secs": [
+    6.0,
+    8.5
+  ],
+  "specialist": "apa_control_analysis",
+  "inputs": [
+    {
+      "topic": "/functions/parking_pnc/apa_planning_trajectory",
+      "field": "apa_traj",
+      "max_age_ms": 150
+    },
+    {
+      "topic": "/sensor/chassis/vehicle_status",
+      "field": "velocity_mps",
+      "max_age_ms": 50
+    }
+  ],
+  "question": "规划轨迹和车辆反馈是否新鲜且单位/方向一致，还是控制器首次产生track-out？",
+  "boundary": "planning trajectory -> control tracking",
+  "confidence": "medium"
+}

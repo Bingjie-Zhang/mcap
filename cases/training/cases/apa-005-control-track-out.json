@@ -1,0 +1,45 @@
+{
+  "case_id": "apa-005-control-track-out",
+  "symptom": "轨迹有效但车辆横向跟踪误差持续增大并退出。",
+  "depth": "standard",
+  "recording": "recordings/apa-005-control-track-out.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": {
+      "topic": "/functions/parking_pnc/apa_control_state",
+      "field": "tracking_error",
+      "predicate": "gt 0.3",
+      "last_good": 6.0,
+      "first_bad": 7.0
+    },
+    "window_secs": [
+      6.0,
+      8.5
+    ],
+    "specialist": "apa_control_analysis",
+    "inputs": [
+      {
+        "topic": "/functions/parking_pnc/apa_planning_trajectory",
+        "field": "apa_traj",
+        "max_age_ms": 150
+      },
+      {
+        "topic": "/sensor/chassis/vehicle_status",
+        "field": "velocity_mps",
+        "max_age_ms": 50
+      }
+    ],
+    "question": "规划轨迹和车辆反馈是否新鲜且单位/方向一致，还是控制器首次产生track-out？",
+    "boundary": "planning trajectory -> control tracking",
+    "confidence": "medium"
+  },
+  "labels": {
+    "class": "control-track-out",
+    "initiating_cause": "unknown within control boundary",
+    "necessary_condition": "valid trajectory and reverse gear",
+    "amplifier": "lat_err=0.42m",
+    "consequence": "exit_reason=106",
+    "observability_gap": "steering command not recorded"
+  },
+  "record_count": 63
+}

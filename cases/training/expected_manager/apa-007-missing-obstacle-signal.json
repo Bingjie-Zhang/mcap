@@ -1,0 +1,25 @@
+{
+  "clock": "log_time",
+  "anchor": {
+    "topic": "/functions/parking_pnc/apa_decision",
+    "field": "errcode",
+    "predicate": "eq 205",
+    "last_good": 3.0,
+    "first_bad": 4.0
+  },
+  "window_secs": [
+    3.0,
+    4.5
+  ],
+  "specialist": "apa_decision_analysis",
+  "inputs": [
+    {
+      "topic": "/functions/perception/obstacle_pk",
+      "field": "valid",
+      "max_age_ms": 100
+    }
+  ],
+  "question": "4.0s附近自由空间/障碍物输入是无效、超时，还是被过滤未录制？",
+  "boundary": "observability gap before decision",
+  "confidence": "medium"
+}

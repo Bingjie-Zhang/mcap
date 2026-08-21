@@ -1,0 +1,32 @@
+{
+  "case_id": "apa-009-bad-from-start-camera-fault",
+  "symptom": "录制开始时APA已Disable，无法观察到故障前过渡。",
+  "depth": "quick",
+  "recording": "recordings/apa-009-bad-from-start-camera-fault.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": {
+      "topic": "/functions/parking_pnc/apa_state",
+      "field": "work_state",
+      "predicate": "eq 1",
+      "last_good": null,
+      "first_bad": 0.0
+    },
+    "window_secs": [
+      0.0,
+      1.0
+    ],
+    "route": [],
+    "boundary": "pre-recording / missing history",
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "bad-from-start",
+    "initiating_cause": "unknown before recording",
+    "necessary_condition": "camera fault state already active",
+    "amplifier": null,
+    "consequence": "decision STOP and no trajectory",
+    "observability_gap": "no last-good sample"
+  },
+  "record_count": 35
+}

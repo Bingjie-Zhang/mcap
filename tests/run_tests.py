@@ -344,6 +344,12 @@ with open(a.recording, "rb") as fh:
     staged = BUNDLE / "skills" / "mcap-analysis" / "references" / "apa_topic_registry.yaml"
     check("render.registry_no_drift", staged.exists() and staged.read_text() == pack_reg)
 
+    # ---- 第三重门禁：9 场景金标准数据集（cases/training）----
+    proc = subprocess.run([sys.executable, str(BUNDLE / "tests" / "eval_training.py")],
+                          capture_output=True, text=True, timeout=600)
+    check("golden.9scenarios", proc.returncode == 0,
+          proc.stdout.strip().splitlines()[-1] if proc.stdout else proc.stderr[:200])
+
     print(f"\nall {PASSED} checks passed")
     return 0
 

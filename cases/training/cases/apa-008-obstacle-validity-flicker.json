@@ -1,0 +1,45 @@
+{
+  "case_id": "apa-008-obstacle-validity-flicker",
+  "symptom": "障碍物有效标志间歇性变为false，决策/规划随之重规划。",
+  "depth": "standard",
+  "recording": "recordings/apa-008-obstacle-validity-flicker.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": {
+      "topic": "/functions/perception/obstacle_pk",
+      "field": "valid",
+      "predicate": "eq false",
+      "last_good": 4.0,
+      "first_bad": 5.0
+    },
+    "window_secs": [
+      4.0,
+      6.5
+    ],
+    "specialist": "apa_perception_analysis",
+    "inputs": [
+      {
+        "topic": "/functions/perception/obstacle_pk",
+        "field": "object_id",
+        "max_age_ms": 100
+      },
+      {
+        "topic": "/functions/parking_pnc/apa_decision",
+        "field": "collision_result",
+        "max_age_ms": 100
+      }
+    ],
+    "question": "object_id=701的身份、frame和valid性是否连续，还是感知侧先丢失？",
+    "boundary": "perception validity -> decision/planning",
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "perception-flicker",
+    "initiating_cause": "obstacle validity drops",
+    "necessary_condition": "obstacle used by decision/planning",
+    "amplifier": "replan=true",
+    "consequence": "temporary safety margin change",
+    "observability_gap": null
+  },
+  "record_count": 63
+}

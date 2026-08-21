@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "APA manager synthetic case",
+  "type": "object",
+  "required": ["case_id", "symptom", "depth", "recording", "expected", "labels"],
+  "properties": {
+    "case_id": {"type": "string"},
+    "symptom": {"type": "string"},
+    "depth": {"enum": ["quick", "standard", "deep"]},
+    "recording": {"type": "string"},
+    "record_count": {"type": "integer", "minimum": 1},
+    "expected": {"type": "object"},
+    "labels": {"type": "object"}
+  },
+  "additionalProperties": true
+}

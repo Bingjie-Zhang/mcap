@@ -1,0 +1,45 @@
+{
+  "case_id": "apa-002-obstacle-close-stop",
+  "symptom": "泊入过程中突然误认为前方有障碍并停车。",
+  "depth": "standard",
+  "recording": "recordings/apa-002-obstacle-close-stop.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": {
+      "topic": "/functions/parking_pnc/apa_decision",
+      "field": "stop_distance",
+      "predicate": "lt 0.15",
+      "last_good": 6.0,
+      "first_bad": 7.0
+    },
+    "window_secs": [
+      6.0,
+      7.5
+    ],
+    "specialist": "apa_decision_analysis",
+    "inputs": [
+      {
+        "topic": "/functions/perception/obstacle_pk",
+        "field": "pose.x",
+        "max_age_ms": 100
+      },
+      {
+        "topic": "/functions/parking_pnc/apa_planning_trajectory",
+        "field": "clearance",
+        "max_age_ms": 150
+      }
+    ],
+    "question": "障碍物701在决策评估时是否真实存在且新鲜，还是决策首次产生Close？",
+    "boundary": "perception.obstacle_pk -> apa_decision",
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "decision-stop",
+    "initiating_cause": "valid obstacle enters path",
+    "necessary_condition": "APA_IN and reverse trajectory active",
+    "amplifier": null,
+    "consequence": "state suspend then exit_reason=22",
+    "observability_gap": null
+  },
+  "record_count": 63
+}
