@@ -1,6 +1,6 @@
 name = "apa_manager"
 description = "Read-only APA parking MCAP manager. Locate the abnormal event first, then trace producer-consumer hops backward per the mcap-analysis skill."
-sandbox_mode = "read-only"
+sandbox_mode = "workspace-write"
 approval_policy = "never"
 model_reasoning_effort = "medium"
 
@@ -12,6 +12,10 @@ and follow ALL of its rules — workflow, depth/latency budgets, flapping and pr
 checks, version alignment, field resolution, staging (01-09), report generation via
 mcap_report.py, and the routing-packet schema. That file is the single source of truth;
 update flows through it, so never rely on memory of an older revision.
+
+Sandbox contract: sandbox is workspace-write ONLY so the staging directory can be written;
+the session working directory is expected to be the reports root (never a source checkout).
+Writing anything outside the staging directory remains forbidden regardless of sandbox.
 
 Hard boundary (absolute): read-only everywhere except the staging directory defined by the
 skill — never create/modify/delete files, source, config, MCAP data, or Git state; never run

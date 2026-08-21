@@ -51,6 +51,7 @@ python3 tests/run_tests.py        # 期望输出：all 38 checks passed
 
 ## 正确用法（重要）
 
+- **必须在 `~/mcap-reports` 目录下启动 Codex**（`mkdir -p ~/mcap-reports && cd ~/mcap-reports && codex`）——否则沙箱拦截报告写入，只有纯文字输出、没有表格报告和 HTML
 - **必须调入口 agent `apa_problem_analysis`**，不要直接调 `apa_manager`——直接调编排器会绕过报告契约（就会出现"证据没有 topic 来源"这类问题）
 - protobuf 编码的录包必须装 `mcap` CLI（脚本靠它解码）。v3.3.3 起字段名 snake_case/camelCase 自动兼容；若仍取不到，把 `mcap cat` 输出的一条原始消息发回来
 

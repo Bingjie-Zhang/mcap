@@ -51,6 +51,11 @@ mcap --help
     cd mcap-analysis-bundle && ./install.sh --pack apa
     # 重启 Codex（或新建任务）
 
+    # 重要：请在报告目录下启动 Codex 会话（不要在源码目录启动）：
+    mkdir -p ~/mcap-reports && cd ~/mcap-reports && codex
+    # 原因：入口/编排 agent 需要写报告文件（workspace-write 沙箱只放开当前目录），
+    # 在报告目录启动 = 只有报告目录可写，源码依然只读
+
 日常使用：@apa_problem_analysis 分析 /路径/xxx.mcap，症状：……
 报告输出：~/mcap-reports/<案例号>/（report.md + case_report.html）
 出问题反馈：把 ~/mcap-reports/<案例号>/ 文件夹发给张冰洁。
