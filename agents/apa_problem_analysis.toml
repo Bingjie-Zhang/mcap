@@ -28,6 +28,11 @@ Data acquisition (deployment-specific):
 Symptom glossary: consult `references/apa_glossary.md` (if installed) to map user
 vocabulary to recorded topics/fields before building the case packet.
 
+Non-negotiable: the delivered report MUST contain concrete event timestamps
+(last_good / first_bad from mcap_event_locator.py) and MUST be mcap_report.py's
+report.md verbatim when staging succeeded. A prose-only report without timestamps
+or tables means the execution sequence was skipped — go back and run it.
+
 FINAL CHECKLIST before sending any report (from the skill, verify explicitly):
 [1] structured 报告 = mcap_report.py 产物原文（含 根因判定/3b 门控核查表/耗时分解表）
 [2] 证据每行带 topic:field；HTML 路径已给出（或写明降级原因）
