@@ -1,24 +1,23 @@
 {
- "clock": "log_time",
- "anchor": {
-  "topic": "/functions/parking_pnc/apa_state",
-  "field": "exit_reason",
-  "predicate": "eq 21",
-  "last_good": 6.0,
-  "first_bad": 6.5
- },
- "window_secs": [
-  5.0,
-  6.7
- ],
- "route": [
-  {
-   "topic": "/sensor/chassis/vehicle_status",
-   "field": "epb",
-   "max_age_ms": 50
-  }
- ],
- "boundary": "vehicle EPB debounce -> APA state machine",
- "confidence": "medium",
- "errata": "2026-08-21 勘误: 原 last_good=5.0 有误,mcap 实际 6.0s 采样 exit_reason 仍为 0(工具实测+人工核对原始序列),修正为 6.0"
+  "clock": "log_time",
+  "anchor": {
+    "topic": "/functions/parking_pnc/apa_state",
+    "field": "exit_reason",
+    "predicate": "eq 21",
+    "last_good": 6.0,
+    "first_bad": 6.5
+  },
+  "window_secs": [
+    5.0,
+    6.7
+  ],
+  "route": [
+    {
+      "topic": "/sensor/chassis/vehicle_status",
+      "field": "epb",
+      "max_age_ms": 50
+    }
+  ],
+  "boundary": "vehicle EPB debounce -> APA state machine",
+  "confidence": "medium"
 }

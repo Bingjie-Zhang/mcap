@@ -9,7 +9,7 @@
       "topic": "/functions/parking_pnc/apa_state",
       "field": "exit_reason",
       "predicate": "eq 21",
-      "last_good": 5.0,
+      "last_good": 6.0,
       "first_bad": 6.49
     },
     "window_secs": [

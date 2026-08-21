@@ -1,5 +1,5 @@
 {
-  "dataset_id": "apa-manager-training-20260821",
+  "dataset_id": "apa-manager-training-20260821-v2",
   "synthetic": true,
   "source_commit": "15920335bd47c235654425b23e87fe05ee4f1ff0",
   "source_paths": [
@@ -66,6 +66,282 @@
     {
       "case_id": "apa-009-bad-from-start-camera-fault",
       "recording": "recordings/apa-009-bad-from-start-camera-fault.mcap",
+      "records": 35,
+      "class": "bad-from-start"
+    },
+    {
+      "case_id": "apa-002b-safe-distance-01",
+      "recording": "recordings/apa-002b-safe-distance-01.mcap",
+      "records": 56,
+      "class": "decision-threshold"
+    },
+    {
+      "case_id": "apa-002b-safe-distance-02",
+      "recording": "recordings/apa-002b-safe-distance-02.mcap",
+      "records": 56,
+      "class": "decision-threshold"
+    },
+    {
+      "case_id": "apa-002b-safe-distance-03",
+      "recording": "recordings/apa-002b-safe-distance-03.mcap",
+      "records": 56,
+      "class": "decision-threshold"
+    },
+    {
+      "case_id": "apa-002b-safe-distance-04",
+      "recording": "recordings/apa-002b-safe-distance-04.mcap",
+      "records": 56,
+      "class": "decision-threshold"
+    },
+    {
+      "case_id": "apa-002b-safe-distance-05",
+      "recording": "recordings/apa-002b-safe-distance-05.mcap",
+      "records": 56,
+      "class": "decision-threshold"
+    },
+    {
+      "case_id": "apa-002b-safe-distance-06",
+      "recording": "recordings/apa-002b-safe-distance-06.mcap",
+      "records": 56,
+      "class": "decision-threshold"
+    },
+    {
+      "case_id": "apa-003b-frame-age-01",
+      "recording": "recordings/apa-003b-frame-age-01.mcap",
+      "records": 55,
+      "class": "timing-boundary"
+    },
+    {
+      "case_id": "apa-003b-frame-age-02",
+      "recording": "recordings/apa-003b-frame-age-02.mcap",
+      "records": 55,
+      "class": "timing-boundary"
+    },
+    {
+      "case_id": "apa-003b-frame-age-03",
+      "recording": "recordings/apa-003b-frame-age-03.mcap",
+      "records": 55,
+      "class": "timing-boundary"
+    },
+    {
+      "case_id": "apa-003b-frame-age-04",
+      "recording": "recordings/apa-003b-frame-age-04.mcap",
+      "records": 55,
+      "class": "timing-boundary"
+    },
+    {
+      "case_id": "apa-003b-frame-age-05",
+      "recording": "recordings/apa-003b-frame-age-05.mcap",
+      "records": 55,
+      "class": "timing-boundary"
+    },
+    {
+      "case_id": "apa-003b-frame-age-06",
+      "recording": "recordings/apa-003b-frame-age-06.mcap",
+      "records": 55,
+      "class": "timing-boundary"
+    },
+    {
+      "case_id": "apa-003b-frame-age-07",
+      "recording": "recordings/apa-003b-frame-age-07.mcap",
+      "records": 55,
+      "class": "timing-boundary"
+    },
+    {
+      "case_id": "apa-004b-slot-id-01",
+      "recording": "recordings/apa-004b-slot-id-01.mcap",
+      "records": 49,
+      "class": "slot-id-boundary"
+    },
+    {
+      "case_id": "apa-004b-slot-id-02",
+      "recording": "recordings/apa-004b-slot-id-02.mcap",
+      "records": 49,
+      "class": "slot-id-boundary"
+    },
+    {
+      "case_id": "apa-004b-slot-id-03",
+      "recording": "recordings/apa-004b-slot-id-03.mcap",
+      "records": 49,
+      "class": "slot-id-boundary"
+    },
+    {
+      "case_id": "apa-004c-slot-width-01",
+      "recording": "recordings/apa-004c-slot-width-01.mcap",
+      "records": 49,
+      "class": "slot-geometry-boundary"
+    },
+    {
+      "case_id": "apa-004c-slot-width-02",
+      "recording": "recordings/apa-004c-slot-width-02.mcap",
+      "records": 49,
+      "class": "slot-geometry-boundary"
+    },
+    {
+      "case_id": "apa-004c-slot-width-03",
+      "recording": "recordings/apa-004c-slot-width-03.mcap",
+      "records": 49,
+      "class": "slot-geometry-boundary"
+    },
+    {
+      "case_id": "apa-004d-slot-yaw-01",
+      "recording": "recordings/apa-004d-slot-yaw-01.mcap",
+      "records": 49,
+      "class": "slot-yaw-boundary"
+    },
+    {
+      "case_id": "apa-004d-slot-yaw-02",
+      "recording": "recordings/apa-004d-slot-yaw-02.mcap",
+      "records": 49,
+      "class": "slot-yaw-boundary"
+    },
+    {
+      "case_id": "apa-004d-slot-yaw-03",
+      "recording": "recordings/apa-004d-slot-yaw-03.mcap",
+      "records": 49,
+      "class": "slot-yaw-boundary"
+    },
+    {
+      "case_id": "apa-004d-slot-yaw-04",
+      "recording": "recordings/apa-004d-slot-yaw-04.mcap",
+      "records": 49,
+      "class": "slot-yaw-boundary"
+    },
+    {
+      "case_id": "apa-005b-track-error-01",
+      "recording": "recordings/apa-005b-track-error-01.mcap",
+      "records": 63,
+      "class": "control-threshold"
+    },
+    {
+      "case_id": "apa-005b-track-error-02",
+      "recording": "recordings/apa-005b-track-error-02.mcap",
+      "records": 63,
+      "class": "control-threshold"
+    },
+    {
+      "case_id": "apa-005b-track-error-03",
+      "recording": "recordings/apa-005b-track-error-03.mcap",
+      "records": 63,
+      "class": "control-threshold"
+    },
+    {
+      "case_id": "apa-005b-track-error-04",
+      "recording": "recordings/apa-005b-track-error-04.mcap",
+      "records": 63,
+      "class": "control-threshold"
+    },
+    {
+      "case_id": "apa-005c-plan-age-01",
+      "recording": "recordings/apa-005c-plan-age-01.mcap",
+      "records": 62,
+      "class": "planning-freshness-boundary"
+    },
+    {
+      "case_id": "apa-005c-plan-age-02",
+      "recording": "recordings/apa-005c-plan-age-02.mcap",
+      "records": 62,
+      "class": "planning-freshness-boundary"
+    },
+    {
+      "case_id": "apa-005c-plan-age-03",
+      "recording": "recordings/apa-005c-plan-age-03.mcap",
+      "records": 62,
+      "class": "planning-freshness-boundary"
+    },
+    {
+      "case_id": "apa-006b-epb-hold-01",
+      "recording": "recordings/apa-006b-epb-hold-01.mcap",
+      "records": 58,
+      "class": "epb-debounce-boundary"
+    },
+    {
+      "case_id": "apa-006b-epb-hold-02",
+      "recording": "recordings/apa-006b-epb-hold-02.mcap",
+      "records": 58,
+      "class": "epb-debounce-boundary"
+    },
+    {
+      "case_id": "apa-006b-epb-hold-03",
+      "recording": "recordings/apa-006b-epb-hold-03.mcap",
+      "records": 58,
+      "class": "epb-debounce-boundary"
+    },
+    {
+      "case_id": "apa-007b-missing-input-01",
+      "recording": "recordings/apa-007b-missing-input-01.mcap",
+      "records": 52,
+      "class": "observability-gap"
+    },
+    {
+      "case_id": "apa-007b-missing-input-02",
+      "recording": "recordings/apa-007b-missing-input-02.mcap",
+      "records": 52,
+      "class": "observability-gap"
+    },
+    {
+      "case_id": "apa-007b-missing-input-03",
+      "recording": "recordings/apa-007b-missing-input-03.mcap",
+      "records": 52,
+      "class": "observability-gap"
+    },
+    {
+      "case_id": "apa-007b-missing-input-04",
+      "recording": "recordings/apa-007b-missing-input-04.mcap",
+      "records": 48,
+      "class": "observability-gap"
+    },
+    {
+      "case_id": "apa-008b-confidence-01",
+      "recording": "recordings/apa-008b-confidence-01.mcap",
+      "records": 56,
+      "class": "perception-confidence-boundary"
+    },
+    {
+      "case_id": "apa-008b-confidence-02",
+      "recording": "recordings/apa-008b-confidence-02.mcap",
+      "records": 56,
+      "class": "perception-confidence-boundary"
+    },
+    {
+      "case_id": "apa-008b-confidence-03",
+      "recording": "recordings/apa-008b-confidence-03.mcap",
+      "records": 56,
+      "class": "perception-confidence-boundary"
+    },
+    {
+      "case_id": "apa-008c-validity-duration-01",
+      "recording": "recordings/apa-008c-validity-duration-01.mcap",
+      "records": 63,
+      "class": "perception-validity-duration"
+    },
+    {
+      "case_id": "apa-008c-validity-duration-02",
+      "recording": "recordings/apa-008c-validity-duration-02.mcap",
+      "records": 63,
+      "class": "perception-validity-duration"
+    },
+    {
+      "case_id": "apa-008c-validity-duration-03",
+      "recording": "recordings/apa-008c-validity-duration-03.mcap",
+      "records": 63,
+      "class": "perception-validity-duration"
+    },
+    {
+      "case_id": "apa-009b-surround-block",
+      "recording": "recordings/apa-009b-surround-block.mcap",
+      "records": 35,
+      "class": "bad-from-start"
+    },
+    {
+      "case_id": "apa-009b-surround-fault",
+      "recording": "recordings/apa-009b-surround-fault.mcap",
+      "records": 35,
+      "class": "bad-from-start"
+    },
+    {
+      "case_id": "apa-009b-uss-fault",
+      "recording": "recordings/apa-009b-uss-fault.mcap",
       "records": 35,
       "class": "bad-from-start"
     }
