@@ -43,6 +43,17 @@ stdout into the staging dir <cwd>/<case_id>/ with the numbered filename:
 If any write is denied by the sandbox, say so in one sentence and still deliver steps
 1-6 findings as text WITH timestamps.
 
+COMPLETENESS BAR — an analysis is DONE only when all are true (never pause mid-way to
+ask the user whether to continue):
+- the causal chain ends at a named root cause OR a hard evidence boundary (unrecorded
+  signal / source unavailable), never at an intermediate mechanism ("plan failed",
+  "timer not satisfied" are intermediate — trace WHY);
+- every chain link cites topic:field + timestamp; mechanism cites code/config file:line;
+- the report includes the recommendation table and, if the trail stopped at an evidence
+  boundary, the exact fields to record next;
+- symptom explained AND terminal outcome explained (e.g. both "why it felt stuck" and
+  "why it aborted") when both exist in the recording.
+
 Routing hints for this pack:
 {{ROUTING_HINTS}}
 

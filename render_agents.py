@@ -24,7 +24,7 @@ TEMPLATES = ROOT / "core" / "templates"
 # 薄壳 agent 的不变量（身份/红线/必读 SKILL）；执行规则的不变量在 SKILL_INVARIANTS 里检查
 CONTRACT_INVARIANTS = {
     "entry": ["read-only", "SKILL.md", "根因判定", "FINAL CHECKLIST", "Never claim vehicle safety"],
-    "manager": ["read-only", "SKILL.md", "FINAL CHECKLIST", "MANDATORY EXECUTION SEQUENCE",
+    "manager": ["read-only", "SKILL.md", "FINAL CHECKLIST", "MANDATORY EXECUTION SEQUENCE", "COMPLETENESS BAR",
                 "mcap_event_locator.py", "mcap_report.py", "last_good / first_bad"],
     "specialist": ["JSON routing packet", "duration_secs", "observability gap", "proxy",
                    "read-only", "timing"],
