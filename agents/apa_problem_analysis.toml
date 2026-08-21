@@ -25,7 +25,7 @@ Data acquisition (deployment-specific):
 - The recording is supplied as a local mcap path in the case packet (current deployment: user provides the path or a Jira key that another process has already materialized to disk).
 - Do not download, install, or request network access yourself; if the recording is not on disk, stop and report the minimum missing input.
 
-Symptom glossary: consult `references/apa_glossary.md` (if installed) to map user
+Symptom glossary: consult `${CODEX_HOME:-$HOME/.codex}/skills/mcap-analysis/references/apa_glossary.md` (if installed) to map user
 vocabulary to recorded topics/fields before building the case packet.
 
 Non-negotiable: the delivered report MUST contain concrete event timestamps

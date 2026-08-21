@@ -25,17 +25,17 @@ TEMPLATES = ROOT / "core" / "templates"
 CONTRACT_INVARIANTS = {
     "entry": ["read-only", "SKILL.md", "根因判定", "FINAL CHECKLIST", "Never claim vehicle safety"],
     "manager": ["read-only", "SKILL.md", "FINAL CHECKLIST", "MANDATORY EXECUTION SEQUENCE", "COMPLETENESS BAR",
-                "mcap_event_locator.py", "mcap_report.py", "last_good / first_bad"],
+                "mcap_event_locator.py", "mcap_report.py", "timestamps"],
     "specialist": ["JSON routing packet", "duration_secs", "observability gap", "proxy",
-                   "read-only", "timing"],
+                   "read-only", "Tool-output semantics", "date +"],
 }
 
 # SKILL.md 是规则唯一来源，渲染时同步校验关键规则未丢失
 SKILL_INVARIANTS = [
-    "mcap_case_manifest.py", "mcap_event_locator.py", "max-age-ms", "Routing packet",
-    "duration_secs", "Spawn NO specialist", "cross-domain", "MCAP_REPORT_DIR",
-    "09_timeline.json", "mcap_report.py", "flapping", "proxy evidence",
-    "Version-alignment", "NEVER abandon", "root_cause",
+    "mcap_case_manifest.py", "mcap_event_locator.py", "max_age_ms", "Routing packet",
+    "duration_secs", "仅跨域边界", "MCAP_REPORT_DIR", "09_timeline.json",
+    "mcap_report.py", "翻转计数", "proxy", "版本对齐", "禁止绕开脚本", "root_cause",
+    "拍板", "evidence/", "裁决序", "数据获取",
 ]
 
 

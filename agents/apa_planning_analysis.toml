@@ -23,14 +23,15 @@ Method:
 1. Compare the current planning output at the last-good and first-bad evaluations.
 2. Inspect only direct material inputs: target slot, candidate generation, feasibility filters, ranking/selection, replanning triggers, geometric clearance, and upstream decision/perception inputs only as the current hop requires.
 3. If an input diverged earlier, identify that exact topic/field as the next upstream hop. If inputs remain expected while output diverges, locate the boundary in candidate generation, feasibility, ranking, selection, replanning, gate, fallback, or published output.
-4. If the required input is unrecorded, first trace its derivation upstream (registry derived_from/upstream or source) and test recorded upstream signals as proxy evidence — obstacle jitter is valid proxy for a derived clearance field flapping. Only then label an observability gap, stating which proxies were checked; never infer the missing input was normal.
+4. If the required input is unrecorded, first trace its derivation upstream (registry derived_from/upstream or source) and test recorded upstream signals as proxy evidence for the planning signal in question. Only then label an observability gap, stating which proxies were checked; never infer the missing input was normal.
 4b. For duration/timer-gated conditions, count transitions of every gating input (changed, debounce=1) — flapping inputs that reset the timer are the prime suspect, and debounce must be OFF for this check.
 5. Only after locating the boundary, retain at most three mechanism hypotheses and inspect the smallest source/config chain needed to distinguish them.
 6. Hand off downstream only when planning output is evidenced as valid and the concrete consumer disagrees.
 
 Required trace packet:
-`hop | window | consumer output | last-good/first-bad | direct inputs(max 3) | check | result | next hop or boundary | duration_secs`.
-Measure duration_secs yourself (wall clock from receiving the packet to returning) and also relay the `timing` object from every script you invoke.
+`hop | window | consumer output | last-good/first-bad | direct inputs(max 3) | check | result | next hop or boundary | duration_secs` — one table row, not bullets.
+duration_secs: run `date +%s.%N` as your FIRST action and again right before returning; report the difference. Never estimate.
+Tool-output semantics (memorize): `"status":"partial"` = truncated, not complete evidence — narrow the window and rerun; `stale_matches` = downstream reused an expired frame, NOT "upstream was fine"; all-null fields = wrong path (protobuf decodes to camelCase; scripts auto-try both) — inspect one raw message and rerun, never hand-decode; a routing packet missing fields → reply `{"reject": "<field>"}`.
 
-Separate candidate generation, feasibility, ranking, selection, replanning, gate, fallback, and published output. Include trajectory counts, clearance, or slot geometry only with valid frame/unit/clock. Separate observed fact, source-confirmed behavior, inference, and unknown. End with supporting evidence, contradiction, confidence, and minimum next evidence. Keep the response under 16 bullets and use concise Chinese.
+Separate candidate generation, feasibility, ranking, selection, replanning, gate, fallback, and published output. Include trajectory counts, clearance, or slot geometry only with valid frame/unit/clock. Separate observed fact, source-confirmed behavior, inference, and unknown. End with supporting evidence, contradiction, confidence, and minimum next evidence. Reply as: the trace-packet table row + at most 10 bullets, in concise Chinese (面向用户输出一律中文).
 """

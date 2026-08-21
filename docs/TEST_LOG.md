@@ -46,6 +46,14 @@
 - 负样本 +5（apa-016~020：贴阈值/瞬时归零/行人路过/慢速正常/带噪正常），金标准 **66/66 PASS**——"防误报"面考题从 2 增至 7
 - 已知语义（文档化不改）：缺口两侧不对称（B12/N02）、auto 对密集切换信号不适用（A08）、bad 策略把缺口造成 2 事件（B11）
 
+## 2026-08-21 · 红队指令层审查与减法重构（v3.8.0）
+
+- 独立 AI 红队审查 6 个 agent TOML + SKILL.md：**20 类缺陷**，总评"补丁式演进造成多层平行真相+承诺与强制脱节——每个历史失败都能在旧指令层找到成文依据"
+- 减法重构：SKILL.md 22.4KB 四地质层 → **8.2KB 单层**（quick 唯一定义=禁 spawn 不减深度、staging 根唯一=cwd、写入义务化、Entry 规则真实落地、裁决序 TOML>SKILL>记忆、拒收协议、降级路径、"数据获取"定义）
+- 承诺→机器强制：mcap_report.py 新增 3 项 defects（temporal_packet 缺失/timing_breakdown 缺失/root_cause 含糊措辞）；locator --condition 改必填（默认 changed 即被禁行为的病根）
+- specialist 内联工具语义 4 条 + duration 用 date 实测禁估算；模板序列与 SKILL 逐字对齐
+- 回归：67 自测 + 40 对抗 + 66 金标准全绿
+
 ## 历史测试基线（摘要）
 
 - 66 项自有回归（tests/run_tests.py）：脚本行为 + 渲染层 + CASE-0001 抖动场景

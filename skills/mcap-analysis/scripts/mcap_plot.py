@@ -37,6 +37,11 @@ def load_json(path: Path):
         return None
 
 
+def load_case_json(case_dir: Path, name: str):
+    # evidence/ 子目录优先，兼容根目录旧布局
+    return load_json(case_dir / "evidence" / name) or load_json(case_dir / name)
+
+
 
 def fingerprint(points, missing, source, sha):
     sha8 = (sha or "")[:8] or "unknown"
@@ -349,11 +354,11 @@ def combined_timeline(timeline):
 
 
 def build(case_dir: Path, layout: str = "combined") -> str:
-    manifest = load_json(case_dir / "01_manifest.json") or {}
-    trace = load_json(case_dir / "06_trace.json")
-    conclusion = load_json(case_dir / "07_conclusion.json")
-    code_refs = load_json(case_dir / "08_code_refs.json")
-    timeline = load_json(case_dir / "09_timeline.json")
+    manifest = load_case_json(case_dir, "01_manifest.json") or {}
+    trace = load_case_json(case_dir, "06_trace.json")
+    conclusion = load_case_json(case_dir, "07_conclusion.json")
+    code_refs = load_case_json(case_dir, "08_code_refs.json")
+    timeline = load_case_json(case_dir, "09_timeline.json")
     sha = (manifest.get("recording") or {}).get("sha256")
     repo_root = ((manifest.get("source") or {}).get("repo")) or ""
 

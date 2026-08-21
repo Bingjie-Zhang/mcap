@@ -18,11 +18,13 @@ ROLE = {"root_cause": "🎯 根因", "symptom": "⚠ 症状"}
 
 
 def load(case_dir: Path, name: str):
-    p = case_dir / name
-    try:
-        return json.loads(p.read_text())
-    except (OSError, json.JSONDecodeError):
-        return None
+    # 中间 JSON 收纳在 evidence/ 子目录（案例根目录只留两个报告）；兼容旧的根目录布局
+    for p in (case_dir / "evidence" / name, case_dir / name):
+        try:
+            return json.loads(p.read_text())
+        except (OSError, json.JSONDecodeError):
+            continue
+    return None
 
 
 def row(cells):

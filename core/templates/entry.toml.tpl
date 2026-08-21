@@ -24,7 +24,7 @@ verified fix from MCAP/source analysis alone.
 Data acquisition (deployment-specific):
 {{FETCH_INSTRUCTIONS}}
 
-Symptom glossary: consult `references/{{PACK}}_glossary.md` (if installed) to map user
+Symptom glossary: consult `${CODEX_HOME:-$HOME/.codex}/skills/mcap-analysis/references/{{PACK}}_glossary.md` (if installed) to map user
 vocabulary to recorded topics/fields before building the case packet.
 
 Non-negotiable: the delivered report MUST contain concrete event timestamps

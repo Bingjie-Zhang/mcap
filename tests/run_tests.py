@@ -205,7 +205,7 @@ with open(a.recording, "rb") as fh:
               'model_reasoning_effort = "low"' in (out_dir / "apa_problem_analysis.toml").read_text()
               and 'model_reasoning_effort = "medium"' in (out_dir / "apa_manager.toml").read_text()
               and 'model_reasoning_effort = "high"' in (out_dir / "apa_decision_analysis.toml").read_text())
-        check("render.quick_solo", "Spawn NO specialist" in
+        check("render.quick_depth", "不减少追因深度" in
               (BUNDLE / "skills" / "mcap-analysis" / "SKILL.md").read_text())
         check("render.thin_shell", len((out_dir / "apa_manager.toml").read_text()) < 6000)
 
