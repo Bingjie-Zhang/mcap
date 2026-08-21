@@ -1,0 +1,25 @@
+{
+  "clock": "log_time",
+  "anchor": {
+    "topic": "/functions/parking_pnc/apa_decision",
+    "field": "collision_result",
+    "predicate": "regex Close|COLLISION|STOP",
+    "last_good": 5.0,
+    "first_bad": 6.0
+  },
+  "window_secs": [
+    5.0,
+    6.5
+  ],
+  "specialist": "apa_decision_analysis",
+  "inputs": [
+    {
+      "topic": "/functions/perception/obstacle_pk",
+      "field": "pose.x",
+      "max_age_ms": 100
+    }
+  ],
+  "question": "距离0.199m相对0.25m安全阈值时，决策是否按预期切换Close？",
+  "boundary": "obstacle distance -> decision collision gate",
+  "confidence": "high"
+}

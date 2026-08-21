@@ -1,0 +1,17 @@
+{
+  "clock": "log_time",
+  "anchor": {
+    "topic": "/functions/parking_pnc/apa_state",
+    "field": "work_state",
+    "predicate": "eq 1",
+    "last_good": null,
+    "first_bad": 0.0
+  },
+  "window_secs": [
+    0.0,
+    1.0
+  ],
+  "route": [],
+  "boundary": "pre-recording / missing history",
+  "confidence": "high"
+}

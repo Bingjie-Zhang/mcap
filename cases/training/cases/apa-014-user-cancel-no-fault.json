@@ -1,0 +1,42 @@
+{
+  "case_id": "apa-014-user-cancel-no-fault",
+  "symptom": "泊车中在7.0s用户主动取消（PARKING→USER_CANCELLED），各信号全程正常。",
+  "depth": "quick",
+  "recording": "recordings/apa-014-user-cancel-no-fault.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": null,
+    "note": "user_cancel_no_fault",
+    "route": [],
+    "negative_checks": [
+      {
+        "topic": "/functions/parking_pnc/apa_decision",
+        "field": "stop_distance",
+        "predicate": "lt 0.15",
+        "expect": "all_good"
+      },
+      {
+        "topic": "/functions/parking_pnc/apa_state",
+        "field": "exit_reason",
+        "predicate": "ne 0",
+        "expect": "all_good"
+      },
+      {
+        "topic": "/functions/parking_pnc/apa_planning_trajectory",
+        "field": "trajectory_num",
+        "predicate": "eq 0",
+        "expect": "all_good"
+      }
+    ],
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "negative-user-cancel",
+    "initiating_cause": "user cancel request (not a fault)",
+    "necessary_condition": null,
+    "amplifier": null,
+    "consequence": "clean transition to USER_CANCELLED, exit_reason stays 0",
+    "observability_gap": null
+  },
+  "record_count": 70
+}

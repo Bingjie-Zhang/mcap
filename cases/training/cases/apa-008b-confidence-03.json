@@ -1,0 +1,18 @@
+{
+  "case_id": "apa-008b-confidence-03",
+  "symptom": "障碍物置信度临界值：0.251。",
+  "depth": "standard",
+  "recording": "recordings/apa-008b-confidence-03.mcap",
+  "expected": {
+    "anchor_status": "all_good",
+    "route": [],
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "perception-confidence-boundary",
+    "confidence": 0.251,
+    "threshold": 0.25,
+    "expected_bad": false
+  },
+  "record_count": 56
+}

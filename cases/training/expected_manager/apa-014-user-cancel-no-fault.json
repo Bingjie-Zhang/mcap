@@ -1,0 +1,27 @@
+{
+  "clock": "log_time",
+  "anchor": null,
+  "note": "user_cancel_no_fault",
+  "route": [],
+  "negative_checks": [
+    {
+      "topic": "/functions/parking_pnc/apa_decision",
+      "field": "stop_distance",
+      "predicate": "lt 0.15",
+      "expect": "all_good"
+    },
+    {
+      "topic": "/functions/parking_pnc/apa_state",
+      "field": "exit_reason",
+      "predicate": "ne 0",
+      "expect": "all_good"
+    },
+    {
+      "topic": "/functions/parking_pnc/apa_planning_trajectory",
+      "field": "trajectory_num",
+      "predicate": "eq 0",
+      "expect": "all_good"
+    }
+  ],
+  "confidence": "high"
+}

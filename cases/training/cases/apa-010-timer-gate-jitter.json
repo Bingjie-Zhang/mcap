@@ -1,0 +1,50 @@
+{
+  "case_id": "apa-010-timer-gate-jitter",
+  "symptom": "车辆早已接近停止，但完成状态迟迟不切，最后才切换。",
+  "depth": "standard",
+  "recording": "recordings/apa-010-timer-gate-jitter.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": {
+      "topic": "/functions/parking_pnc/apa_state",
+      "field": "work_state",
+      "predicate": "eq 8",
+      "last_good": 9.0,
+      "first_bad": 10.0
+    },
+    "window_secs": [
+      3.0,
+      10.5
+    ],
+    "specialist": "apa_decision_analysis",
+    "inputs": [
+      {
+        "topic": "/functions/parking_pnc/apa_decision",
+        "field": "stop_distance",
+        "max_age_ms": 600
+      },
+      {
+        "topic": "/functions/parking_pnc/apa_decision",
+        "field": "timer_gate_active",
+        "max_age_ms": 600
+      }
+    ],
+    "flap_check": {
+      "topic": "/functions/parking_pnc/apa_decision",
+      "field": "timer_gate_active",
+      "min_flips": 10
+    },
+    "question": "完成计时门控为何迟至10.0s才满足？stop_distance是否在0.15阈值附近反复进出导致计时清零？",
+    "boundary": "decision finish-gate timer -> state transition",
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "timer-gate-jitter",
+    "initiating_cause": "stop_distance jitters around the 0.15m finish-gate threshold",
+    "necessary_condition": "finish requires 2s continuous gate-active",
+    "amplifier": "timer resets to 0 on every gate exit (5 round trips)",
+    "consequence": "state switch to work_state=8 delayed until 10.0s",
+    "observability_gap": null
+  },
+  "record_count": 103
+}

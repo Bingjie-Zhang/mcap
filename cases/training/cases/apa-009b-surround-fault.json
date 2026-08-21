@@ -1,0 +1,30 @@
+{
+  "case_id": "apa-009b-surround-fault",
+  "symptom": "录制开始即硬件故障：exit_reason=351。",
+  "depth": "quick",
+  "recording": "recordings/apa-009b-surround-fault.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": {
+      "topic": "/functions/parking_pnc/apa_state",
+      "field": "work_state",
+      "predicate": "eq 1",
+      "last_good": null,
+      "first_bad": 0.0
+    },
+    "window_secs": [
+      0.0,
+      1.0
+    ],
+    "route": [],
+    "boundary": "pre-recording / missing history",
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "bad-from-start",
+    "exit_reason": 351,
+    "fault_name": "surround-fault",
+    "observability_gap": "no last-good sample"
+  },
+  "record_count": 35
+}

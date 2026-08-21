@@ -1,0 +1,30 @@
+{
+  "clock": "log_time",
+  "anchor": {
+    "topic": "/functions/parking_pnc/apa_control_state",
+    "field": "tracking_error",
+    "predicate": "gt 0.3",
+    "last_good": 21.0,
+    "first_bad": 22.0
+  },
+  "window_secs": [
+    19.0,
+    24.5
+  ],
+  "specialist": "apa_control_analysis",
+  "inputs": [
+    {
+      "topic": "/functions/parking_pnc/apa_planning_trajectory",
+      "field": "apa_traj",
+      "max_age_ms": 1100
+    },
+    {
+      "topic": "/sensor/chassis/vehicle_status",
+      "field": "velocity_mps",
+      "max_age_ms": 1100
+    }
+  ],
+  "question": "tracking_error是从2.0s起以约0.013m/s线性漂移20s后越过0.3，还是存在突变点？",
+  "boundary": "gradual drift inside control tracking (no step change)",
+  "confidence": "medium"
+}

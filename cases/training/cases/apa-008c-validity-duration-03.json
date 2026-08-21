@@ -1,0 +1,37 @@
+{
+  "case_id": "apa-008c-validity-duration-03",
+  "symptom": "障碍物valid=false持续3个周期。",
+  "depth": "standard",
+  "recording": "recordings/apa-008c-validity-duration-03.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": {
+      "topic": "/functions/perception/obstacle_pk",
+      "field": "valid",
+      "predicate": "eq false",
+      "last_good": 4.0,
+      "first_bad": 5.0
+    },
+    "window_secs": [
+      4.0,
+      8.5
+    ],
+    "specialist": "apa_perception_analysis",
+    "inputs": [
+      {
+        "topic": "/functions/perception/obstacle_pk",
+        "field": "object_id",
+        "max_age_ms": 100
+      }
+    ],
+    "question": "valid=false持续3周期时，是否为感知首个分歧而非决策误判?",
+    "boundary": "perception obstacle gate",
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "perception-validity-duration",
+    "bad_duration_cycles": 3,
+    "replan": true
+  },
+  "record_count": 63
+}

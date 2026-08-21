@@ -1,0 +1,19 @@
+{
+  "case_id": "apa-004c-slot-width-03",
+  "symptom": "车位宽度临界值：1.21m。",
+  "depth": "standard",
+  "recording": "recordings/apa-004c-slot-width-03.mcap",
+  "expected": {
+    "anchor_status": "all_good",
+    "route": [],
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "slot-geometry-boundary",
+    "slot_width_m": 1.21,
+    "narrow_threshold_m": 1.2,
+    "expected_invalid": false,
+    "error_code": 0
+  },
+  "record_count": 49
+}

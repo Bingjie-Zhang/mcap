@@ -1,0 +1,36 @@
+{
+  "case_id": "apa-006b-epb-hold-02",
+  "symptom": "EPB保持时间临界值：1.50s。",
+  "depth": "standard",
+  "recording": "recordings/apa-006b-epb-hold-02.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": {
+      "topic": "/functions/parking_pnc/apa_state",
+      "field": "exit_reason",
+      "predicate": "eq 21",
+      "last_good": 5.0,
+      "first_bad": 6.5
+    },
+    "window_secs": [
+      5.0,
+      6.7
+    ],
+    "route": [
+      {
+        "topic": "/sensor/chassis/vehicle_status",
+        "field": "epb",
+        "max_age_ms": 50
+      }
+    ],
+    "boundary": "vehicle EPB debounce -> APA state machine",
+    "confidence": "medium"
+  },
+  "labels": {
+    "class": "epb-debounce-boundary",
+    "epb_hold_s": 1.5,
+    "threshold_s": 1.5,
+    "exit_reason": 21
+  },
+  "record_count": 58
+}

@@ -1,0 +1,38 @@
+{
+  "case_id": "apa-005c-plan-age-03",
+  "symptom": "规划到控制的输入年龄：151ms。",
+  "depth": "standard",
+  "recording": "recordings/apa-005c-plan-age-03.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": {
+      "topic": "/functions/parking_pnc/apa_control_state",
+      "field": "tracking_error",
+      "predicate": "gt 0.3",
+      "last_good": 6.0,
+      "first_bad": 7.0
+    },
+    "window_secs": [
+      6.0,
+      8.2
+    ],
+    "specialist": "apa_control_analysis",
+    "inputs": [
+      {
+        "topic": "/functions/parking_pnc/apa_planning_trajectory",
+        "field": "header.timestamp",
+        "max_age_ms": 150
+      }
+    ],
+    "question": "控制消费的规划轨迹年龄为151ms，是否超过150ms合同并导致跟踪异常？",
+    "boundary": "planning freshness -> control tracking",
+    "confidence": "medium"
+  },
+  "labels": {
+    "class": "planning-freshness-boundary",
+    "age_ms": 151,
+    "max_age_ms": 150,
+    "expected_bad": true
+  },
+  "record_count": 62
+}

@@ -1,0 +1,42 @@
+{
+  "case_id": "apa-004d-slot-yaw-04",
+  "symptom": "车位角度临界值：1.6709rad。",
+  "depth": "standard",
+  "recording": "recordings/apa-004d-slot-yaw-04.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": {
+      "topic": "/functions/parking_pnc/apa_planning_trajectory",
+      "field": "trajectory_num",
+      "predicate": "eq 0",
+      "last_good": 3.0,
+      "first_bad": 4.0
+    },
+    "window_secs": [
+      3.0,
+      4.5
+    ],
+    "specialist": "apa_planning_analysis",
+    "inputs": [
+      {
+        "topic": "/functions/perception/parking_slot_info",
+        "field": "yaw_rad",
+        "max_age_ms": 150
+      }
+    ],
+    "question": "slot_yaw=1.6709rad是否越过[0.7854,1.6708]合法区间？",
+    "boundary": "slot yaw -> planning validity",
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "slot-yaw-boundary",
+    "slot_yaw_rad": 1.6709,
+    "valid_range_rad": [
+      0.7854,
+      1.6708
+    ],
+    "expected_invalid": true,
+    "error_code": 206
+  },
+  "record_count": 49
+}

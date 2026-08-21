@@ -1,0 +1,31 @@
+{
+  "clock": "log_time",
+  "anchor": {
+    "topic": "/functions/parking_pnc/apa_decision",
+    "field": "stop_distance",
+    "predicate": "lt 0.15",
+    "last_good": 6.0,
+    "first_bad": 7.0
+  },
+  "window_secs": [
+    6.0,
+    8.5
+  ],
+  "specialist": "apa_decision_analysis",
+  "inputs": [
+    {
+      "topic": "/functions/perception/obstacle_pk",
+      "field": "pose.x",
+      "max_age_ms": 1100
+    }
+  ],
+  "clock_note": {
+    "topic": "/functions/parking_pnc/apa_decision",
+    "header_offset_secs": 0.8,
+    "first_bad_on_header_time": 7.8,
+    "note": "apa_decision的data.header.timestamp相对log_time固定+0.8s；用header_time对时会把first_bad误判为7.8s，应以log_time为准"
+  },
+  "question": "决策topic的header时间与log_time存在固定+0.8s偏移，异常时刻应以哪个时钟为准？",
+  "boundary": "perception.obstacle_pk -> apa_decision (with decision header clock skew)",
+  "confidence": "high"
+}

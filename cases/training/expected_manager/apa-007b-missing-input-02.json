@@ -1,0 +1,25 @@
+{
+  "clock": "log_time",
+  "anchor": {
+    "topic": "/functions/parking_pnc/apa_decision",
+    "field": "errcode",
+    "predicate": "eq 215",
+    "last_good": 3.0,
+    "first_bad": 4.0
+  },
+  "window_secs": [
+    3.0,
+    4.5
+  ],
+  "specialist": "apa_decision_analysis",
+  "inputs": [
+    {
+      "topic": "/functions/perception/parking_slot_info",
+      "field": "validity",
+      "max_age_ms": 100
+    }
+  ],
+  "question": "输入slot是超时、无效，还是在录制侧被过滤？",
+  "boundary": "missing input -> decision gate",
+  "confidence": "medium"
+}

@@ -1,0 +1,39 @@
+{
+  "case_id": "apa-005b-track-error-04",
+  "symptom": "控制横向跟踪误差临界值：0.420m。",
+  "depth": "standard",
+  "recording": "recordings/apa-005b-track-error-04.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": {
+      "topic": "/functions/parking_pnc/apa_control_state",
+      "field": "tracking_error",
+      "predicate": "gt 0.3",
+      "last_good": 6.0,
+      "first_bad": 7.0
+    },
+    "window_secs": [
+      6.0,
+      8.5
+    ],
+    "specialist": "apa_control_analysis",
+    "inputs": [
+      {
+        "topic": "/functions/parking_pnc/apa_planning_trajectory",
+        "field": "apa_traj",
+        "max_age_ms": 150
+      }
+    ],
+    "question": "tracking_error=0.420m处在0.3m阈值哪一侧，是否应触发track-out？",
+    "boundary": "tracking error -> control state",
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "control-threshold",
+    "tracking_error_m": 0.42,
+    "threshold_m": 0.3,
+    "expected_bad": true,
+    "error_code": 106
+  },
+  "record_count": 63
+}

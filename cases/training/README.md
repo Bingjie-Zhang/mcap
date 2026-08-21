@@ -38,3 +38,12 @@ python3 ../../.codex/skills/mcap-analysis/scripts/mcap_event_locator.py recordin
 ```
 
 期望结果是：`apa-002` 的首个异常输出在 7.0 s 左右，下一跳为障碍物输入；`apa-003` 应被识别为过期输入，而不是“上游正常”；`apa-007` 应保留“输入未录制/不可观测”的未知项。
+
+## 扩展场景 10-15（generate_extension.py 生成）
+
+10. `apa-010-timer-gate-jitter`：收尾计时门控抖动——`stop_distance` 在 0.15 阈值附近 5 个来回进出（`timer_gate_active` 共 11 次翻转），计时反复清零，`work_state=8` 迟至 10.0s 才切换；expected 含 `flap_check`（min_flips=10）。
+11. `apa-011-cascade-perception-replan-abort`：级联——障碍物 `valid=false` 间歇异常（4/5/7/8/9s）→ `replan_fail_count` 累计到 5、`trajectory_num` 反复归零 → 10.0s 状态 ABORT（`exit_reason=118`）；expected 含三层 `trace_path`。
+12. `apa-012-topic-rate-drop`：`obstacle_pk` 6.0s 起从 10Hz 降到 2Hz（不断流），10Hz 决策消费旧帧比例上升（每 0.5s 内 3/5 帧龄 >150ms，共 36 次 stale）；anchor 为 `obstacle_input_age_ms gt 150`（first_bad 6.2s），expected 含 `stale_check`（min_stale=30）。
+13. `apa-013-gradual-drift`：`tracking_error` 自 2.0s 起以 0.013/s 从 0.05 线性漂移，20s 后于 22.0s 首次越过 0.3（无突变），24.0s `exit_reason=106`。
+14. `apa-014-user-cancel-no-fault`：负样本——7.0s 用户主动取消（PARKING→USER_CANCELLED，`exit_reason` 保持 0），常见故障谓词（stop_distance lt 0.15 / exit_reason ne 0 / trajectory_num eq 0）全部 all_good；expected `anchor: null` + `note: user_cancel_no_fault`。
+15. `apa-015-clock-skew`：`apa_decision` 的 `data.header.timestamp` 相对 log_time 固定 +0.8s；真实异常为 `stop_distance lt 0.15`，log_time 下 first_bad=7.0s、header_time 下会误判为 7.8s；expected 含 `clock_note`。

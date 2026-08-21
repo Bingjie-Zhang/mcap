@@ -1,0 +1,39 @@
+{
+  "case_id": "apa-003b-frame-age-05",
+  "symptom": "障碍物输入年龄接近 freshness/lost timer：300ms。",
+  "depth": "standard",
+  "recording": "recordings/apa-003b-frame-age-05.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": {
+      "topic": "/functions/parking_pnc/apa_decision",
+      "field": "collision_result",
+      "predicate": "regex Close|COLLISION|STOP",
+      "last_good": 5.0,
+      "first_bad": 6.0
+    },
+    "window_secs": [
+      5.0,
+      6.2
+    ],
+    "specialist": "apa_perception_analysis",
+    "inputs": [
+      {
+        "topic": "/functions/perception/obstacle_pk",
+        "field": "header.timestamp",
+        "max_age_ms": 100
+      }
+    ],
+    "question": "决策在6.0s使用的障碍物年龄是否为300ms，是否超过100ms freshness合同？",
+    "boundary": "obstacle freshness -> decision collision gate",
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "timing-boundary",
+    "age_ms": 300,
+    "freshness_limit_ms": 100,
+    "lost_timer_ms": 300,
+    "initiating_cause": "source frame age near contract"
+  },
+  "record_count": 55
+}

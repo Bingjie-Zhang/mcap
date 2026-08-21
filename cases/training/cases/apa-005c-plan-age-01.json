@@ -1,0 +1,18 @@
+{
+  "case_id": "apa-005c-plan-age-01",
+  "symptom": "规划到控制的输入年龄：149ms。",
+  "depth": "standard",
+  "recording": "recordings/apa-005c-plan-age-01.mcap",
+  "expected": {
+    "anchor_status": "all_good",
+    "route": [],
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "planning-freshness-boundary",
+    "age_ms": 149,
+    "max_age_ms": 150,
+    "expected_bad": false
+  },
+  "record_count": 62
+}

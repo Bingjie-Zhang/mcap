@@ -1,0 +1,19 @@
+{
+  "case_id": "apa-005b-track-error-01",
+  "symptom": "控制横向跟踪误差临界值：0.299m。",
+  "depth": "standard",
+  "recording": "recordings/apa-005b-track-error-01.mcap",
+  "expected": {
+    "anchor_status": "all_good",
+    "route": [],
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "control-threshold",
+    "tracking_error_m": 0.299,
+    "threshold_m": 0.3,
+    "expected_bad": false,
+    "error_code": 0
+  },
+  "record_count": 63
+}

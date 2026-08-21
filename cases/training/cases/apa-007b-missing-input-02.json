@@ -1,0 +1,40 @@
+{
+  "case_id": "apa-007b-missing-input-02",
+  "symptom": "关键输入缺失：slot。",
+  "depth": "standard",
+  "recording": "recordings/apa-007b-missing-input-02.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": {
+      "topic": "/functions/parking_pnc/apa_decision",
+      "field": "errcode",
+      "predicate": "eq 215",
+      "last_good": 3.0,
+      "first_bad": 4.0
+    },
+    "window_secs": [
+      3.0,
+      4.5
+    ],
+    "specialist": "apa_decision_analysis",
+    "inputs": [
+      {
+        "topic": "/functions/perception/parking_slot_info",
+        "field": "validity",
+        "max_age_ms": 100
+      }
+    ],
+    "question": "输入slot是超时、无效，还是在录制侧被过滤？",
+    "boundary": "missing input -> decision gate",
+    "confidence": "medium"
+  },
+  "labels": {
+    "class": "observability-gap",
+    "missing_topics": [
+      "slot"
+    ],
+    "error_code": 215,
+    "observability_gap": "critical input absent after 4.0s"
+  },
+  "record_count": 52
+}

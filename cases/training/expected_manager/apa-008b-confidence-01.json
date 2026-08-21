@@ -1,0 +1,25 @@
+{
+  "clock": "log_time",
+  "anchor": {
+    "topic": "/functions/perception/obstacle_pk",
+    "field": "confidence",
+    "predicate": "lt 0.25",
+    "last_good": 4.0,
+    "first_bad": 5.0
+  },
+  "window_secs": [
+    4.0,
+    5.5
+  ],
+  "specialist": "apa_perception_analysis",
+  "inputs": [
+    {
+      "topic": "/functions/parking_pnc/apa_decision",
+      "field": "collision_result",
+      "max_age_ms": 100
+    }
+  ],
+  "question": "置信度0.249相对0.25阈值是否应触发感知有效性降级？",
+  "boundary": "perception obstacle gate",
+  "confidence": "high"
+}

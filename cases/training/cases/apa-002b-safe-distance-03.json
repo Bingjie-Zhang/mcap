@@ -1,0 +1,39 @@
+{
+  "case_id": "apa-002b-safe-distance-03",
+  "symptom": "障碍物距离安全阈值附近：0.249m。",
+  "depth": "standard",
+  "recording": "recordings/apa-002b-safe-distance-03.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": {
+      "topic": "/functions/parking_pnc/apa_decision",
+      "field": "collision_result",
+      "predicate": "regex Close|COLLISION|STOP",
+      "last_good": 5.0,
+      "first_bad": 6.0
+    },
+    "window_secs": [
+      5.0,
+      6.5
+    ],
+    "specialist": "apa_decision_analysis",
+    "inputs": [
+      {
+        "topic": "/functions/perception/obstacle_pk",
+        "field": "pose.x",
+        "max_age_ms": 100
+      }
+    ],
+    "question": "距离0.249m相对0.25m安全阈值时，决策是否按预期切换Close？",
+    "boundary": "obstacle distance -> decision collision gate",
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "decision-threshold",
+    "threshold_m": 0.25,
+    "observed_distance_m": 0.249,
+    "initiating_cause": "obstacle distance near decision_min_safe_dist",
+    "consequence": "Close"
+  },
+  "record_count": 56
+}

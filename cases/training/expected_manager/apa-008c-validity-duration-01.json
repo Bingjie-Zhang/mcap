@@ -1,0 +1,25 @@
+{
+  "clock": "log_time",
+  "anchor": {
+    "topic": "/functions/perception/obstacle_pk",
+    "field": "valid",
+    "predicate": "eq false",
+    "last_good": 4.0,
+    "first_bad": 5.0
+  },
+  "window_secs": [
+    4.0,
+    6.5
+  ],
+  "specialist": "apa_perception_analysis",
+  "inputs": [
+    {
+      "topic": "/functions/perception/obstacle_pk",
+      "field": "object_id",
+      "max_age_ms": 100
+    }
+  ],
+  "question": "valid=false持续1周期时，是否为感知首个分歧而非决策误判?",
+  "boundary": "perception obstacle gate",
+  "confidence": "high"
+}

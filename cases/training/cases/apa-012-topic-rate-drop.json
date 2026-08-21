@@ -1,0 +1,46 @@
+{
+  "case_id": "apa-012-topic-rate-drop",
+  "symptom": "决策侧障碍物输入帧龄间歇性超标，旧帧占比明显上升，但上游并未断流。",
+  "depth": "standard",
+  "recording": "recordings/apa-012-topic-rate-drop.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": {
+      "topic": "/functions/parking_pnc/apa_decision",
+      "field": "obstacle_input_age_ms",
+      "predicate": "gt 150",
+      "last_good": 6.1,
+      "first_bad": 6.2
+    },
+    "window_secs": [
+      5.5,
+      12.0
+    ],
+    "specialist": "apa_perception_analysis",
+    "inputs": [
+      {
+        "topic": "/functions/perception/obstacle_pk",
+        "field": "header.timestamp",
+        "max_age_ms": 150
+      }
+    ],
+    "stale_check": {
+      "source_topic": "/functions/perception/obstacle_pk",
+      "target_topic": "/functions/parking_pnc/apa_decision",
+      "max_age_ms": 150,
+      "min_stale": 30
+    },
+    "question": "obstacle_pk是否从6.0s起由10Hz降到2Hz（未断流），使决策消费的旧帧比例上升？",
+    "boundary": "obstacle publish rate -> decision input freshness",
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "input-rate-drop",
+    "initiating_cause": "obstacle_pk rate drops 10Hz -> 2Hz at 6.0s",
+    "necessary_condition": "decision consumes latest-available frame at 10Hz",
+    "amplifier": "no timeout: stale frames silently reused",
+    "consequence": "3 of 5 decision cycles per 0.5s window use frames older than 150ms",
+    "observability_gap": null
+  },
+  "record_count": 259
+}

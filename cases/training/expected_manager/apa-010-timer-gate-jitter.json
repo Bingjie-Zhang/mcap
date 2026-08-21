@@ -1,0 +1,35 @@
+{
+  "clock": "log_time",
+  "anchor": {
+    "topic": "/functions/parking_pnc/apa_state",
+    "field": "work_state",
+    "predicate": "eq 8",
+    "last_good": 9.0,
+    "first_bad": 10.0
+  },
+  "window_secs": [
+    3.0,
+    10.5
+  ],
+  "specialist": "apa_decision_analysis",
+  "inputs": [
+    {
+      "topic": "/functions/parking_pnc/apa_decision",
+      "field": "stop_distance",
+      "max_age_ms": 600
+    },
+    {
+      "topic": "/functions/parking_pnc/apa_decision",
+      "field": "timer_gate_active",
+      "max_age_ms": 600
+    }
+  ],
+  "flap_check": {
+    "topic": "/functions/parking_pnc/apa_decision",
+    "field": "timer_gate_active",
+    "min_flips": 10
+  },
+  "question": "完成计时门控为何迟至10.0s才满足？stop_distance是否在0.15阈值附近反复进出导致计时清零？",
+  "boundary": "decision finish-gate timer -> state transition",
+  "confidence": "high"
+}

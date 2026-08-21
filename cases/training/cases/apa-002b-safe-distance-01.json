@@ -1,0 +1,19 @@
+{
+  "case_id": "apa-002b-safe-distance-01",
+  "symptom": "障碍物距离安全阈值附近：0.260m。",
+  "depth": "standard",
+  "recording": "recordings/apa-002b-safe-distance-01.mcap",
+  "expected": {
+    "anchor_status": "all_good",
+    "route": [],
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "decision-threshold",
+    "threshold_m": 0.25,
+    "observed_distance_m": 0.26,
+    "initiating_cause": "obstacle distance near decision_min_safe_dist",
+    "consequence": "Open"
+  },
+  "record_count": 56
+}

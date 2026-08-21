@@ -1,0 +1,31 @@
+{
+  "clock": "log_time",
+  "anchor": {
+    "topic": "/functions/parking_pnc/apa_decision",
+    "field": "obstacle_input_age_ms",
+    "predicate": "gt 150",
+    "last_good": 6.1,
+    "first_bad": 6.2
+  },
+  "window_secs": [
+    5.5,
+    12.0
+  ],
+  "specialist": "apa_perception_analysis",
+  "inputs": [
+    {
+      "topic": "/functions/perception/obstacle_pk",
+      "field": "header.timestamp",
+      "max_age_ms": 150
+    }
+  ],
+  "stale_check": {
+    "source_topic": "/functions/perception/obstacle_pk",
+    "target_topic": "/functions/parking_pnc/apa_decision",
+    "max_age_ms": 150,
+    "min_stale": 30
+  },
+  "question": "obstacle_pk是否从6.0s起由10Hz降到2Hz（未断流），使决策消费的旧帧比例上升？",
+  "boundary": "obstacle publish rate -> decision input freshness",
+  "confidence": "high"
+}

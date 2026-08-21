@@ -1,0 +1,25 @@
+{
+  "clock": "log_time",
+  "anchor": {
+    "topic": "/functions/parking_pnc/apa_decision",
+    "field": "collision_result",
+    "predicate": "regex Close|COLLISION|STOP",
+    "last_good": 5.0,
+    "first_bad": 6.0
+  },
+  "window_secs": [
+    5.0,
+    6.2
+  ],
+  "specialist": "apa_decision_analysis",
+  "inputs": [
+    {
+      "topic": "/functions/perception/obstacle_pk",
+      "field": "header.timestamp",
+      "max_age_ms": 100
+    }
+  ],
+  "question": "决策在6.0s使用的障碍物年龄是否为100ms，是否超过100ms freshness合同？",
+  "boundary": "fresh obstacle -> decision collision gate",
+  "confidence": "medium"
+}

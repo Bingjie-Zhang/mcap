@@ -1,0 +1,50 @@
+{
+  "case_id": "apa-011-cascade-perception-replan-abort",
+  "symptom": "泊入过程中规划反复失败，最终APA进入ABORT。",
+  "depth": "standard",
+  "recording": "recordings/apa-011-cascade-perception-replan-abort.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": {
+      "topic": "/functions/parking_pnc/apa_state",
+      "field": "exit_reason",
+      "predicate": "eq 118",
+      "last_good": 9.0,
+      "first_bad": 10.0
+    },
+    "window_secs": [
+      3.5,
+      10.5
+    ],
+    "specialist": "apa_planning_analysis",
+    "inputs": [
+      {
+        "topic": "/functions/parking_pnc/apa_planning_trajectory",
+        "field": "replan_fail_count",
+        "max_age_ms": 1100
+      },
+      {
+        "topic": "/functions/perception/obstacle_pk",
+        "field": "valid",
+        "max_age_ms": 1100
+      }
+    ],
+    "trace_path": [
+      "/functions/parking_pnc/apa_state",
+      "/functions/parking_pnc/apa_planning_trajectory",
+      "/functions/perception/obstacle_pk"
+    ],
+    "question": "ABORT前replan_fail_count为何持续上升？规划失败时段是否与障碍物valid=false间歇异常对齐？",
+    "boundary": "perception validity -> planning replan -> state ABORT",
+    "confidence": "high"
+  },
+  "labels": {
+    "class": "cascade-perception-planning-abort",
+    "initiating_cause": "intermittent obstacle valid=false (4,5,7,8,9s)",
+    "necessary_condition": "planning aborts after 5 accumulated replan failures",
+    "amplifier": "fail counter never resets on brief recovery at 6.0s",
+    "consequence": "state ABORT with exit_reason=118 at 10.0s",
+    "observability_gap": null
+  },
+  "record_count": 91
+}

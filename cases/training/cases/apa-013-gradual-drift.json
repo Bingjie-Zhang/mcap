@@ -1,0 +1,45 @@
+{
+  "case_id": "apa-013-gradual-drift",
+  "symptom": "跟踪误差无突变，缓慢增大约20秒后越过0.3阈值并退出。",
+  "depth": "standard",
+  "recording": "recordings/apa-013-gradual-drift.mcap",
+  "expected": {
+    "clock": "log_time",
+    "anchor": {
+      "topic": "/functions/parking_pnc/apa_control_state",
+      "field": "tracking_error",
+      "predicate": "gt 0.3",
+      "last_good": 21.0,
+      "first_bad": 22.0
+    },
+    "window_secs": [
+      19.0,
+      24.5
+    ],
+    "specialist": "apa_control_analysis",
+    "inputs": [
+      {
+        "topic": "/functions/parking_pnc/apa_planning_trajectory",
+        "field": "apa_traj",
+        "max_age_ms": 1100
+      },
+      {
+        "topic": "/sensor/chassis/vehicle_status",
+        "field": "velocity_mps",
+        "max_age_ms": 1100
+      }
+    ],
+    "question": "tracking_error是从2.0s起以约0.013m/s线性漂移20s后越过0.3，还是存在突变点？",
+    "boundary": "gradual drift inside control tracking (no step change)",
+    "confidence": "medium"
+  },
+  "labels": {
+    "class": "gradual-drift",
+    "initiating_cause": "slow accumulating bias from 2.0s (0.013 m/s)",
+    "necessary_condition": "threshold check is instantaneous, no trend alarm",
+    "amplifier": null,
+    "consequence": "threshold crossed at 22.0s, exit_reason=106 at 24.0s",
+    "observability_gap": "no per-cycle bias estimate recorded"
+  },
+  "record_count": 182
+}
